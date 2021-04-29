@@ -1,0 +1,128 @@
+[Reference File Path]
+[1920x1440]reference.txt
+
+[Default Style]
+剧情人物
+
+[Name Style]
+ミク 初音ミク
+リン 鏡音リン
+レン 鏡音レン
+ルカ 巡音ルカ
+MEIKO MEIKO
+KAITO KAITO
+一歌 星乃一歌
+咲希 天馬咲希
+穂波 望月穗波
+志歩 日野森志步
+みのり 花里みのり
+遥 桐谷遥
+愛莉 桃井愛莉
+雫 日野森雫
+こはね 小豆沢こはね
+杏 白石杏
+彰人 東雲彰人
+冬弥 青柳冬弥
+司 天馬司
+えむ 鳳えむ
+寧々 草薙寧々
+類 神代類
+奏 宵崎奏
+まふゆ 朝比奈まふゆ
+絵名 東雲絵名
+瑞希 暁山瑞希
+ミクの声 初音ミク
+リンの声 鏡音リン
+レンの声 鏡音レン
+ルカの声 巡音ルカ
+MEIKOの声 MEIKO
+KAITOの声 KAITO
+一歌の声 星乃一歌
+咲希の声 天馬咲希
+穂波の声 望月穗波
+志歩の声 日野森志步
+みのりの声 花里みのり
+遥の声 桐谷遥
+愛莉の声 桃井愛莉
+雫の声 日野森雫
+こはねの声 小豆沢こはね
+杏の声 白石杏
+彰人の声 東雲彰人
+冬弥の声 青柳冬弥
+司の声 天馬司
+えむの声 鳳えむ
+寧々の声 草薙寧々
+類の声 神代類
+奏の声 宵崎奏
+まふゆの声 朝比奈まふゆ
+絵名の声 東雲絵名
+瑞希の声 暁山瑞希
+screen screen
+staff staff
+イオリ 剧情人物
+？？？ 剧情人物
+ミオ 剧情人物
+まふゆの友達A 剧情人物
+まふゆの友達B 剧情人物
+弓道部の後輩A 剧情人物
+弓道部の後輩B 剧情人物
+MC 剧情人物
+観客A 剧情人物
+観客B 剧情人物
+メガネの男性 剧情人物
+冬弥の父 剧情人物
+冬弥の父 剧情人物
+杏の父 剧情人物
+杏の父 剧情人物
+杏の父 剧情人物
+男性客 剧情人物
+昔馴染みの客 剧情人物
+冬弥の父 剧情人物
+通行人A 剧情人物
+通行人B 剧情人物
+冬弥の父 剧情人物
+冬弥の父 剧情人物
+コメント 剧情人物
+母親 剧情人物
+父親 剧情人物
+審査結果用紙 剧情人物
+コメントへのレス 剧情人物
+絵名の友達A 剧情人物
+絵名の友達B 剧情人物
+/[Name Style]
+
+[TransitionType Description Ignore]
+0 ignored true
+1 Fade_In true
+2 Fade_Out true
+3 Unknown true
+4 Fade_To_White true
+5 Fade_To_Black true
+6 Text_Box_Jitter false
+7 Background true
+8 TODO_(Location) false
+9 Grey_Filter true
+10 Grey_Filter true
+11 Unknown_Filter true
+12 Unknown_Filter true
+13 Unknown_Filter true
+14 Unknown_Filter true
+15 Mist_Filter true
+16 Mist_Filter true
+17 ignored true
+18 ignored true
+19 Play_Movie true
+20 Sekai_Transition true
+21 Sekai_Transition true
+22 ignored true
+23 ignored true
+24 ignored true
+25 ignored true
+26 ignored true
+27 ignored true
+28 ignored true
+29 ignored true
+30 ignored true
+31 ignored true
+32 ignored true
+/[TransitionType Description Ignore]

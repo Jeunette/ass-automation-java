@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="[PJS]ASS-automation-executable:jar">
+    <output-path>$PROJECT_DIR$/../../[PJS]ASS-automation-executable/bin</output-path>
+    <root id="archive" name="ASS-automation-java.jar">
+      <element id="module-output" name="ASS-automation-java" />
+    </root>
+  </artifact>
+</component>
