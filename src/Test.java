@@ -5,8 +5,8 @@ import java.util.Objects;
 
 public class Test {
 
-    public static final String videoPath = "C:\\Users\\luns7\\Downloads\\Video\\[SHANA]event_21-2.mp4";
-    public static final String jsonPath = "C:\\Users\\luns7\\Downloads\\Video\\event_21_02.json";
+    public static final String videoPath = "C:\\Users\\luns7\\Downloads\\Video\\[SHANA]event_21-8.mp4";
+    public static final String jsonPath = "C:\\Users\\luns7\\Downloads\\Video\\event_21_08.json";
 
     public static void main(String[] args) throws IOException, InterruptedException {
         File mp4 = new File(videoPath);

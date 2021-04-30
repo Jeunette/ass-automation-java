@@ -47,7 +47,8 @@ public class ASSWriter {
         int refTemp = 1;
         for (int i = 1; i < snippetSections.size(); i++) {
             for (int j = refTemp; j < imageSections.size(); j++) {
-                if (snippetSections.get(i).dialogueCount > 2 && snippetSections.get(i).dialogueCount == imageSections.get(j).dialogueCount) {
+                if (snippetSections.get(i).dialogueCount > 2 && Math.abs(j - i) <= Math.abs(imageSections.size() - snippetSections.size())
+                        && snippetSections.get(i).dialogueCount == imageSections.get(j).dialogueCount) {
                     imageRef[j] = i;
                     refTemp = j + 1;
                     break;
