@@ -129,7 +129,8 @@ public class ASSWriter {
                         tempImageSection.getFirst().screen.style = DELETE;
                         tempImageSection.getFirst().screen.name = IGNORE;
                         tempImageSection.getFirst().screen.text = IGNORE_TEXT;
-                        if (imageIndex < imageSections.size()) tempImageSection.add(imageSections.get(imageIndex + 1));
+                        if (imageIndex + 1 < imageSections.size())
+                            tempImageSection.add(imageSections.get(imageIndex + 1));
                         if (tempImageSection.getFirst().dialogues.size() == tempSnippetSection.getFirst().dialogues.size()) {
                             System.out.println("\033[1;93mATTENTION\u001B[0m: Paired combination in \033[1;97msection " + i + "*\u001B[0m ("
                                     + imageSections.get(i).screen.start + " - " + imageSections.get(i).screen.end + ").");

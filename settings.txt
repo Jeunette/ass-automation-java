@@ -89,6 +89,8 @@ MC 剧情人物
 コメントへのレス 剧情人物
 絵名の友達A 剧情人物
 絵名の友達B 剧情人物
+観客達 剧情人物
+新 剧情人物
 /[Name Style]
 
 [TransitionType Description Ignore]
