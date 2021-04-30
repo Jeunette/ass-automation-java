@@ -9,4 +9,4 @@ Commands (for executable):
 
     run [video_file json_file]
     ass [video_file json_file]
-    compress [mp4_video_file]
+    compress mp4_video_file
