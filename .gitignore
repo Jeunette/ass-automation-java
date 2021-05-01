@@ -2,3 +2,5 @@
 ffmpeg.exe
 ffprobe.exe
 /ASS-automation-executable/*
+test.results.temp.txt
+test.formatted_results.temp.txt
