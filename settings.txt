@@ -97,8 +97,8 @@ MC 剧情人物
 絵名の友達B 剧情人物
 観客達 剧情人物
 新 剧情人物
-こはね・杏 剧情人物
 洸太郎 剧情人物
+ミュージシャン 剧情人物
 /[Name Style]
 
 [TransitionType Description Ignore]

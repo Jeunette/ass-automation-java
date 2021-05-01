@@ -69,7 +69,6 @@ public class ImageSystem {
     public LinkedList<ImageData> list;
     public ArrayList<ImageDataResult> results;
     public String[] files;
-    public BufferedImage current;
 
     public int[][] boxRef, borderRef;
     public int whiteStack;
@@ -194,20 +193,22 @@ public class ImageSystem {
             //noinspection BusyWait
             Thread.sleep(2000);
         }
-        processImages(new ColorAnalyzer());
+        this.files = this.directory.list();
+        processImages(new ColorAnalyzer(ImageIO.read(new FileInputStream(directory.getAbsolutePath() + "\\" + files[0]))));
         System.out.println("ImageSystem initialized.");
     }
 
     private void processImages(ColorAnalyzer analyzer) throws IOException, InterruptedException {
         System.out.println("Analysing images...");
-        this.files = this.directory.list();
         for(int index = 0; index < Objects.requireNonNull(this.files).length; ) {
             if (index % 1000 == 0) System.out.println("Processing " + files[index] + "...");
-            current = ImageIO.read(new File(directory.getAbsolutePath() + "\\" + files[index]));
-            list.add(analyzer.analyse(current));
+            DataInputStream datainputstream = new DataInputStream(new BufferedInputStream(new FileInputStream(directory.getAbsolutePath() + "/" + files[index])));
+            byte[] temp = new byte[datainputstream.available()];
+            datainputstream.readFully(temp);
+            datainputstream.close();
+            BufferedImage buffered = ImageIO.read(new ByteArrayInputStream(temp));
+            list.add(analyzer.analyse(buffered));
             // if (index % 1000 == 0) list.getLast().print();
-            this.files = this.directory.list();
-            assert this.files != null;
             if (++index >= this.files.length) {
                 this.files = this.directory.list();
                 assert this.files != null;
