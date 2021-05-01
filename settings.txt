@@ -1,14 +1,17 @@
 [Reference File Path]
-[1920x1440]reference.txt
+reference.txt
+
+[Sample ASS Path]
+untitled.ass
+
+[Default Style]
+関連人物
 
 [Screen Start Offset]
 -0.100
 
 [Screen End Offset]
 0.000
-
-[Default Style]
-剧情人物
 
 [Name Style]
 ミク 初音ミク
@@ -64,41 +67,6 @@ KAITOの声 KAITO
 絵名の声 東雲絵名
 瑞希の声 暁山瑞希
 screen screen
-staff staff
-イオリ 剧情人物
-？？？ 剧情人物
-ミオ 剧情人物
-まふゆの友達A 剧情人物
-まふゆの友達B 剧情人物
-弓道部の後輩A 剧情人物
-弓道部の後輩B 剧情人物
-MC 剧情人物
-観客A 剧情人物
-観客B 剧情人物
-メガネの男性 剧情人物
-冬弥の父 剧情人物
-冬弥の父 剧情人物
-杏の父 剧情人物
-杏の父 剧情人物
-杏の父 剧情人物
-男性客 剧情人物
-昔馴染みの客 剧情人物
-冬弥の父 剧情人物
-通行人A 剧情人物
-通行人B 剧情人物
-冬弥の父 剧情人物
-冬弥の父 剧情人物
-コメント 剧情人物
-母親 剧情人物
-父親 剧情人物
-審査結果用紙 剧情人物
-コメントへのレス 剧情人物
-絵名の友達A 剧情人物
-絵名の友達B 剧情人物
-観客達 剧情人物
-新 剧情人物
-洸太郎 剧情人物
-ミュージシャン 剧情人物
 /[Name Style]
 
 [TransitionType Description Ignore]
@@ -134,5 +102,4 @@ MC 剧情人物
 29 ignored true
 30 ignored true
 31 ignored true
-32 ignored true
 /[TransitionType Description Ignore]

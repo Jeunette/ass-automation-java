@@ -58,10 +58,6 @@ public class Run {
             }
         }
         File ass = new File(mp4.getAbsolutePath() + ".ass");
-        //noinspection ResultOfMethodCallIgnored
-        ass.delete();
-        //noinspection ResultOfMethodCallIgnored
-        ass.createNewFile();
         try {
             System.out.println("Reading from save file...");
             ImageSystem system = new ImageSystem(data);
@@ -69,8 +65,14 @@ public class Run {
                 try {
                     String command = "rmdir /s /q " + frames.getAbsolutePath();
                     Runtime.getRuntime().exec("cmd /C start cmd.exe /C " + command);
-                } catch (IOException ex) { ex.printStackTrace(); }
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
             }
+            //noinspection ResultOfMethodCallIgnored
+            ass.delete();
+            //noinspection ResultOfMethodCallIgnored
+            ass.createNewFile();
             JsonReader reader = new JsonReader(json);
             while (!ref.isFile()) {
                 //noinspection BusyWait
@@ -93,12 +95,18 @@ public class Run {
             try {
                 String command = "rmdir /s /q " + frames.getAbsolutePath();
                 Runtime.getRuntime().exec("cmd /C start cmd.exe /C " + command);
-            } catch (IOException ex) { ex.printStackTrace(); }
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
             JsonReader reader = new JsonReader(json);
             while (!ref.isFile()) {
                 //noinspection BusyWait
                 Thread.sleep(2000);
             }
+            //noinspection ResultOfMethodCallIgnored
+            ass.delete();
+            //noinspection ResultOfMethodCallIgnored
+            ass.createNewFile();
             ASSWriter.write(system, reader.snippets, ref, ass);
         }
         while (true) {

@@ -299,17 +299,22 @@ public class ASSWriter {
     }
 
     public static void write(ImageSystem system, Snippets snippets, File ref, File ass) throws IOException {
-        File defaultASS = new File(DEFAULT_ASS);
+        File defaultASS;
+        try {
+            defaultASS = new File(SettingsHandler.reader(SettingsHandler.CAT_ASS_Path));
+        } catch (Exception ignored) {
+            defaultASS = new File(DEFAULT_ASS);
+        }
         Files.copy(defaultASS.toPath(), ass.toPath(), StandardCopyOption.REPLACE_EXISTING);
         LinkedList<EventSection> imageSections = getEventSections(system, ref);
         LinkedList<EventSection> snippetSections = snippets.getEventSections();
         LinkedList<EventSection> sections = validateEventSections(imageSections, snippetSections);
         if (locationCount != snippets.locationCount) {
             if (locationCount < snippets.locationCount) {
-                System.out.println("\033[1;91mCRITICAL_ERROR\033[0m: Location Transitiom amount mismatched.");
+                System.out.println("\033[1;91mCRITICAL_ERROR\033[0m: Location Transition amount mismatched.");
                 sections.getFirst().screen = new Event(CAUTION, CRITICAL, "{\\an8\\fs80\\bord8}Please inspect & locate more location transitions.", false, false);
             } else {
-                System.out.println("\033[1;30m\033[0;101mFATAL_ERROR\033[0m: Location Transitiom amount \033[1;91mEXCEEDED\033[0m.");
+                System.out.println("\033[1;30m\033[0;101mFATAL_ERROR\033[0m: Location Transition amount \033[1;91mEXCEEDED\033[0m.");
                 sections.getFirst().screen = new Event(CAUTION, FATAL, "FATAL ERROR\\N{\\fs80\\bord8} Please inspect & modify extra location transitions.\\N{\\fs300\\bord30}:P", false, false);
             }
             sections.getFirst().screen.setTime(0, imageSections.getLast().dialogues.getLast().endTime);

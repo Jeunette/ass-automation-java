@@ -46,10 +46,6 @@ public class Test {
             }
         }
         File ass = new File(mp4.getAbsolutePath() + ".ass");
-        //noinspection ResultOfMethodCallIgnored
-        ass.delete();
-        //noinspection ResultOfMethodCallIgnored
-        ass.createNewFile();
         try {
             System.out.println("Reading from save file...");
             ImageSystem system = new ImageSystem(data);
@@ -63,6 +59,10 @@ public class Test {
             ASSWriter.printSections(ASSWriter.getEventSections(system, ref));
             ASSWriter.printSectionsSimple(reader.snippets.getEventSections());
             ASSWriter.printSectionsSimple(ASSWriter.getEventSections(system, ref));
+            //noinspection ResultOfMethodCallIgnored
+            ass.delete();
+            //noinspection ResultOfMethodCallIgnored
+            ass.createNewFile();
             ASSWriter.write(system, reader.snippets, ref, ass);
         } catch (FileNotFoundException | NumberFormatException e) {
             System.out.println("Save file not found.");
@@ -87,6 +87,10 @@ public class Test {
             while (!ref.isFile()) {
                 Thread.sleep(2000);
             }
+            //noinspection ResultOfMethodCallIgnored
+            ass.delete();
+            //noinspection ResultOfMethodCallIgnored
+            ass.createNewFile();
             ASSWriter.write(system, reader.snippets, ref, ass);
         }
     }

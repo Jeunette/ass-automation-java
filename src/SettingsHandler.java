@@ -5,6 +5,7 @@ import java.util.Scanner;
 public class SettingsHandler {
 
     public static final String CAT_Reference_Path = "[Reference File Path]";
+    public static final String CAT_ASS_Path = "[Sample ASS Path]";
 
     public static final String CAT_MAX_ACCEPTABLE_DIFFERENCE = "[Max Acceptable Color Difference]";
     public static final String CAT_MIN_BOX_BORDER_DIFFERENCE = "[Box Border Difference]";
