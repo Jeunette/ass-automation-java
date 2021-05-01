@@ -67,7 +67,7 @@ public class ImageSystem {
 
     public File directory;
     public LinkedList<ImageData> list;
-    public LinkedList<ImageDataResult> results;
+    public ArrayList<ImageDataResult> results;
     public String[] files;
     public BufferedImage current;
 
@@ -76,7 +76,7 @@ public class ImageSystem {
 
     public ImageSystem(File file) throws IOException, InterruptedException {
         this.list = new LinkedList<>();
-        this.results = new LinkedList<>();
+        this.results = new ArrayList<>();
         if (file.isDirectory()) {
             this.directory = file;
             initialize();
@@ -87,17 +87,13 @@ public class ImageSystem {
         analyse();
     }
 
-    public LinkedList<ImageDataResult> getResults() { return results; }
+    public List<ImageDataResult> getResults() {
+        return results;
+    }
 
     public LinkedList<ImageDataResult> getFormattedResults() {
         LinkedList<ImageDataResult> results = new LinkedList<>(this.results);
-        for (int i = 0; i < results.size();) {
-            if (!results.get(i).dialogue || (!results.get(i).start && !results.get(i).out)) {
-                results.remove(i);
-            } else {
-                i++;
-            }
-        }
+        results.removeIf(result -> !result.dialogue || (!result.start && !result.out));
         return results;
     }
 
@@ -148,35 +144,41 @@ public class ImageSystem {
         FileWriter temp = new FileWriter(out);
         BufferedWriter writer = new BufferedWriter(temp);
         writer.append(VALIDATION_STR).append("\n");
-        writer.append((this.directory != null) ? this.directory.getAbsolutePath() : "" ).append("\n");
-        for (ImageDataResult result : results) { writer.append(result.toString()).append("\n"); }
+        writer.append((this.directory != null) ? this.directory.getAbsolutePath() : "").append("\n");
+        for (ImageDataResult result : results) {
+            writer.append(result.toString()).append("\n");
+        }
         writer.close();
         temp.close();
         System.out.println("ImageSystem formatted result saved to " + out.getAbsolutePath());
     }
 
-    public boolean isDialogue(int index) {
-        return !validateDiff(rgbDifference(MIN_BOX_COLOR, list.get(index).main), -255, 0)
-                && validateDiff(rgbDifference(list.get(index).box, boxRef), -MAX_ACCEPTABLE_DIFFERENCE, MAX_ACCEPTABLE_DIFFERENCE, 1)
-                && validateDiff(rgbDifference(list.get(index).border, borderRef), -MAX_ACCEPTABLE_DIFFERENCE, MAX_ACCEPTABLE_DIFFERENCE, 1)
-                && validateDiff(rgbDifference(list.get(index).border, list.get(index).box), MIN_BOX_BORDER_DIFFERENCE, 255, 1)
-                && !validateDiff(rgbDifference(list.get(index).border, list.get(index).box), 0, 0, 1);
+    public boolean isDialogue(ImageData data) {
+        return !validateDiff(rgbDifference(MIN_BOX_COLOR, data.main), -255, 0)
+                && validateDiff(rgbDifference(data.box, boxRef), -MAX_ACCEPTABLE_DIFFERENCE, MAX_ACCEPTABLE_DIFFERENCE, 1)
+                && validateDiff(rgbDifference(data.border, borderRef), -MAX_ACCEPTABLE_DIFFERENCE, MAX_ACCEPTABLE_DIFFERENCE, 1)
+                && validateDiff(rgbDifference(data.border, data.box), MIN_BOX_BORDER_DIFFERENCE, 255, 1)
+                && !validateDiff(rgbDifference(data.border, data.box), 0, 0, 1);
     }
 
-    public boolean isIn(int index) { return results.get(index).dialogue && !results.get(index - 1).dialogue; }
+    public boolean isIn(ImageDataResult previous, ImageDataResult current) {
+        return current.dialogue && !previous.dialogue;
+    }
 
-    public boolean isOut(int index) { return results.get(index).dialogue && !results.get(index + 1).dialogue; }
+    public boolean isOut(ImageDataResult current, ImageDataResult next) {
+        return current.dialogue && !next.dialogue;
+    }
 
-    public boolean isStart(int index) {
-        if (results.get(index).in || !validateDiff(rgbDifference(list.get(index - 1).ref, list.get(index).ref), REF_GAP)) {
+    public boolean isStart(ImageDataResult current, ImageData previousData, ImageData currentData) {
+        if (current.in || !validateDiff(rgbDifference(previousData.ref, currentData.ref), REF_GAP)) {
             whiteStack = 0;
             return true;
         } else {
-            if (!validateDiff(rgbDifference(MIN_WHITE_COLOR, list.get(index).ref), -255, 0) && (whiteStack == 0 || validateDiff(rgbDifference(list.get(index - 1).ref, list.get(index).ref), -CON_GAP, CON_GAP))) {
+            if (!validateDiff(rgbDifference(MIN_WHITE_COLOR, currentData.ref), -255, 0) && (whiteStack == 0 || validateDiff(rgbDifference(previousData.ref, currentData.ref), -CON_GAP, CON_GAP))) {
                 whiteStack++;
-                if (whiteStack > MAX_WHITE_STACK && !validateDiff(rgbDifference(list.get(index - 1).fir, list.get(index).fir), -CON_GAP, CON_GAP)) {
+                if (whiteStack > MAX_WHITE_STACK && !validateDiff(rgbDifference(previousData.fir, currentData.fir), -CON_GAP, CON_GAP)) {
                     whiteStack = 0;
-                    System.out.println("\033[1;93mATTENTION\u001B[0m: Single width text found at \033[1;97mframe " + index + "\u001B[0m. Please verify!");
+                    System.out.println("\033[1;93mATTENTION\u001B[0m: Single width text found at \033[1;97mframe " + current.index + "\u001B[0m. Please verify!");
                     return true;
                 }
             } else {
@@ -227,14 +229,31 @@ public class ImageSystem {
         System.out.println("Generating result...");
         readSettings();
         this.whiteStack = 0;
-        for (int i = 0; i < list.size(); i++) { results.add(new ImageDataResult(i, isDialogue(i))); }
-        for (int i = 1; i < list.size(); i++) {
-            if (results.get(i).dialogue) {
-                results.get(i).in = isIn(i);
-                results.get(i).out = isOut(i);
-                results.get(i).start = isStart(i);
-            }
+        ListIterator<ImageData> dataIterator = list.listIterator();
+        Queue<ImageDataResult> tempResults = new LinkedList<>();
+        for (int i = 0; dataIterator.hasNext(); i++) {
+            tempResults.add(new ImageDataResult(i, isDialogue(dataIterator.next())));
         }
+        ImageDataResult previous;
+        ImageDataResult current = tempResults.poll();
+        ImageDataResult next = tempResults.poll();
+        dataIterator = list.listIterator();
+        results.add(current);
+        while (tempResults.size() > 1) {
+            previous = current;
+            current = next;
+            next = tempResults.poll();
+            if (current.dialogue) {
+                current.in = isIn(previous, current);
+                current.out = isOut(current, next);
+                current.start = isStart(current, dataIterator.next(), dataIterator.next());
+                dataIterator.previous();
+            } else {
+                dataIterator.next();
+            }
+            results.add(current);
+        }
+        results.add(tempResults.poll());
         System.out.println("Results generated.");
     }
 
