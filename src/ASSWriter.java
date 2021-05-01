@@ -43,7 +43,7 @@ public class ASSWriter {
         String locationText = SettingsHandler.refReader(SettingsHandler.REF_CAT_LOCATION_TEXT);
         TransitionHandler handler = new TransitionHandler();
         String locationDescription = handler.getDescription(TYPE_LOCATION);
-        String jitterDescription = handler.getDescription(TYPE_JITTER);
+        // String jitterDescription = handler.getDescription(TYPE_JITTER);
         int[] imageRef = new int[imageSections.size()];
         int refTemp = 1;
         for (int i = 1; i < snippetSections.size(); i++) {

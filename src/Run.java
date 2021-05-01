@@ -73,6 +73,7 @@ public class Run {
             }
             JsonReader reader = new JsonReader(json);
             while (!ref.isFile()) {
+                //noinspection BusyWait
                 Thread.sleep(2000);
             }
             ASSWriter.write(system, reader.snippets, ref, ass);
@@ -95,6 +96,7 @@ public class Run {
             } catch (IOException ex) { ex.printStackTrace(); }
             JsonReader reader = new JsonReader(json);
             while (!ref.isFile()) {
+                //noinspection BusyWait
                 Thread.sleep(2000);
             }
             ASSWriter.write(system, reader.snippets, ref, ass);

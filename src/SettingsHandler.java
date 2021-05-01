@@ -5,9 +5,20 @@ import java.util.Scanner;
 public class SettingsHandler {
 
     public static final String CAT_Reference_Path = "[Reference File Path]";
+
+    public static final String CAT_MAX_ACCEPTABLE_DIFFERENCE = "[Max Acceptable Color Difference]";
+    public static final String CAT_MIN_BOX_BORDER_DIFFERENCE = "[Box Border Difference]";
+    public static final String CAT_MAX_WHITE_STACK = "[Singe Width White Frames]";
+    public static final String CAT_REF_GAP = "[Reference Char Gap]";
+    public static final String CAT_CON_GAP = "[Continuous Gap]";
+    public static final String CAT_MIN_BOX_COLOR = "[Min Box Color]";
+    public static final String CAT_MIN_WHITE_COLOR = "[Min White Color]";
+
     public static final String CAT_SCREEN_START_OFFSET = "[Screen Start Offset]";
     public static final String CAT_SCREEN_END_OFFSET = "[Screen End Offset]";
+
     public static final String CAT_DEFAULT_STYLE = "[Default Style]";
+
     public static final String CAT_LIST_TRANSITION_INFO = "[TransitionType Description Ignore]";
     public static final String CAT_LIST_NAME_INFO = "[Name Style]";
 

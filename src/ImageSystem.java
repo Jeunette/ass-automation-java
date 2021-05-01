@@ -5,15 +5,63 @@ import java.util.*;
 
 public class ImageSystem {
 
-    private static final int MAX_ACCEPTABLE_DIFFERENCE = 18;
-    private static final int MIN_BOX_BORDER_DIFFERENCE = 15;
-    private static final int MAX_WHITE_STACK = 15;
-    private static final double FIR_GAP = 2.0;
-    private static final double REF_GAP = 7.0;
-    private static final double CON_GAP = 2.0;
+    private static final int MAX_ACCEPTABLE_DIFFERENCE_DEFAULT = 18;
+    private static final int MIN_BOX_BORDER_DIFFERENCE_DEFAULT = 15;
+    private static final int MAX_WHITE_STACK_DEFAULT = 15;
+    private static final double REF_GAP_DEFAULT = 7.0;
+    private static final double CON_GAP_DEFAULT = 2.0;
 
-    private static final int[] MIN_BOX_COLOR = {225, 225, 225};
-    private static final int[] MIN_WHITE_COLOR = {245, 243, 246};
+    private static final int[] MIN_BOX_COLOR_DEFAULT = {225, 225, 225};
+    private static final int[] MIN_WHITE_COLOR_DEFAULT = {245, 243, 246};
+
+    private int MAX_ACCEPTABLE_DIFFERENCE;
+    private int MIN_BOX_BORDER_DIFFERENCE;
+    private int MAX_WHITE_STACK;
+    private double REF_GAP;
+    private double CON_GAP;
+
+    private int[] MIN_BOX_COLOR;
+    private int[] MIN_WHITE_COLOR;
+
+    private void readSettings() {
+        MAX_ACCEPTABLE_DIFFERENCE = MAX_ACCEPTABLE_DIFFERENCE_DEFAULT;
+        MIN_BOX_BORDER_DIFFERENCE = MIN_BOX_BORDER_DIFFERENCE_DEFAULT;
+        MAX_WHITE_STACK = MAX_WHITE_STACK_DEFAULT;
+        REF_GAP = REF_GAP_DEFAULT;
+        CON_GAP = CON_GAP_DEFAULT;
+        MIN_BOX_COLOR = MIN_BOX_COLOR_DEFAULT;
+        MIN_WHITE_COLOR = MIN_WHITE_COLOR_DEFAULT;
+        try {
+            MAX_ACCEPTABLE_DIFFERENCE = Integer.parseInt(SettingsHandler.reader(SettingsHandler.CAT_MAX_ACCEPTABLE_DIFFERENCE));
+        } catch (Exception ignored) {
+        }
+        try {
+            MIN_BOX_BORDER_DIFFERENCE = Integer.parseInt(SettingsHandler.reader(SettingsHandler.CAT_MIN_BOX_BORDER_DIFFERENCE));
+        } catch (Exception ignored) {
+        }
+        try {
+            MAX_WHITE_STACK = Integer.parseInt(SettingsHandler.reader(SettingsHandler.CAT_MAX_WHITE_STACK));
+        } catch (Exception ignored) {
+        }
+        try {
+            REF_GAP = Double.parseDouble(SettingsHandler.reader(SettingsHandler.CAT_REF_GAP));
+        } catch (Exception ignored) {
+        }
+        try {
+            CON_GAP = Double.parseDouble(SettingsHandler.reader(SettingsHandler.CAT_CON_GAP));
+        } catch (Exception ignored) {
+        }
+        try {
+            String temp = SettingsHandler.reader(SettingsHandler.CAT_MIN_BOX_COLOR);
+            MIN_BOX_COLOR = new int[]{Integer.parseInt(temp.substring(0, 3)), Integer.parseInt(temp.substring(4, 7)), Integer.parseInt(temp.substring(8, 11))};
+        } catch (Exception ignored) {
+        }
+        try {
+            String temp = SettingsHandler.reader(SettingsHandler.CAT_MIN_WHITE_COLOR);
+            MIN_WHITE_COLOR = new int[]{Integer.parseInt(temp.substring(0, 3)), Integer.parseInt(temp.substring(4, 7)), Integer.parseInt(temp.substring(8, 11))};
+        } catch (Exception ignored) {
+        }
+    }
 
     private static final String VALIDATION_STR = "###PJSCD-IS###";
 
@@ -112,7 +160,7 @@ public class ImageSystem {
                 && validateDiff(rgbDifference(list.get(index).box, boxRef), -MAX_ACCEPTABLE_DIFFERENCE, MAX_ACCEPTABLE_DIFFERENCE, 1)
                 && validateDiff(rgbDifference(list.get(index).border, borderRef), -MAX_ACCEPTABLE_DIFFERENCE, MAX_ACCEPTABLE_DIFFERENCE, 1)
                 && validateDiff(rgbDifference(list.get(index).border, list.get(index).box), MIN_BOX_BORDER_DIFFERENCE, 255, 1)
-                && !validateDiff(rgbDifference(list.get(index).border, list.get(index).box), 0, 1, 1);
+                && !validateDiff(rgbDifference(list.get(index).border, list.get(index).box), 0, 0, 1);
     }
 
     public boolean isIn(int index) { return results.get(index).dialogue && !results.get(index - 1).dialogue; }
@@ -126,7 +174,7 @@ public class ImageSystem {
         } else {
             if (!validateDiff(rgbDifference(MIN_WHITE_COLOR, list.get(index).ref), -255, 0) && (whiteStack == 0 || validateDiff(rgbDifference(list.get(index - 1).ref, list.get(index).ref), -CON_GAP, CON_GAP))) {
                 whiteStack++;
-                if (whiteStack > MAX_WHITE_STACK && !validateDiff(rgbDifference(list.get(index - 1).fir, list.get(index).fir), -FIR_GAP, FIR_GAP)) {
+                if (whiteStack > MAX_WHITE_STACK && !validateDiff(rgbDifference(list.get(index - 1).fir, list.get(index).fir), -CON_GAP, CON_GAP)) {
                     whiteStack = 0;
                     System.out.println("\033[1;93mATTENTION\u001B[0m: Single width text found at \033[1;97mframe " + index + "\u001B[0m. Please verify!");
                     return true;
@@ -140,7 +188,10 @@ public class ImageSystem {
 
     private void initialize() throws IOException, InterruptedException {
         System.out.println("Initializing ImageData System...");
-        while ( Objects.requireNonNull(this.directory.list()).length == 0) { Thread.sleep(2000); }
+        while (Objects.requireNonNull(this.directory.list()).length == 0) {
+            //noinspection BusyWait
+            Thread.sleep(2000);
+        }
         processImages(new ColorAnalyzer());
         System.out.println("ImageSystem initialized.");
     }
@@ -159,10 +210,11 @@ public class ImageSystem {
                 this.files = this.directory.list();
                 assert this.files != null;
                 if (index >= this.files.length) {
+                    //noinspection BusyWait
                     Thread.sleep(2000);
                     this.files = this.directory.list();
                 }
-            };
+            }
         }
         System.out.println("All images processed...");
     }
@@ -173,6 +225,7 @@ public class ImageSystem {
         findRef();
         System.out.println("Reference data found...");
         System.out.println("Generating result...");
+        readSettings();
         this.whiteStack = 0;
         for (int i = 0; i < list.size(); i++) { results.add(new ImageDataResult(i, isDialogue(i))); }
         for (int i = 1; i < list.size(); i++) {
