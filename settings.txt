@@ -1,6 +1,12 @@
 [Reference File Path]
 [1920x1440]reference.txt
 
+[Screen Start Offset]
+-0.100
+
+[Screen End Offset]
+0.000
+
 [Default Style]
 剧情人物
 

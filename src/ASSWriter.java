@@ -28,7 +28,8 @@ public class ASSWriter {
     public static final String IGNORE_TEXT = "DELETE OR COMMENT.\\N{\\fs120\\bord12}USE FOR REFERENCE ONLY.";
 
     public static final double MIN_TIME = 0.46;
-    public static final double SCREEN_TIME_OFFSET = 0.100;
+    public static final double SCREEN_START_OFFSET_DEFAULT = -0.100;
+    public static final double SCREEN_END_OFFSET_DEFAULT = 0.000;
 
     public static final int TYPE_JITTER = 6;
     public static final int TYPE_LOCATION = 8;
@@ -330,13 +331,23 @@ public class ASSWriter {
     }
 
     public static LinkedList<StringBuilder> getEvents(LinkedList<EventSection> sections) {
+        double startOffset = SCREEN_START_OFFSET_DEFAULT;
+        double endOffset = SCREEN_END_OFFSET_DEFAULT;
+        try {
+            startOffset = Double.parseDouble(SettingsHandler.reader(SettingsHandler.CAT_SCREEN_START_OFFSET));
+        } catch (Exception ignored) {
+        }
+        try {
+            endOffset = Double.parseDouble(SettingsHandler.reader(SettingsHandler.CAT_SCREEN_END_OFFSET));
+        } catch (Exception ignored) {
+        }
         LinkedList<StringBuilder> events = new LinkedList<>();
         events.add(new StringBuilder());
         events.add(new StringBuilder());
         events.add(new StringBuilder());
         for (EventSection section : sections) {
-            if (section.screen != null && section.screen.endTime - section.screen.startTime != 0 ) {
-                section.screen.setTime(section.screen.startTime - SCREEN_TIME_OFFSET, section.screen.endTime + SCREEN_TIME_OFFSET);
+            if (section.screen != null && section.screen.endTime - section.screen.startTime != 0) {
+                section.screen.setTime(section.screen.startTime + startOffset, section.screen.endTime + endOffset);
                 events.get(0).append(section.screen.toString()).append("\n");
             }
             for (Event event : section.transitions) {

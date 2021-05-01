@@ -5,6 +5,8 @@ import java.util.Scanner;
 public class SettingsHandler {
 
     public static final String CAT_Reference_Path = "[Reference File Path]";
+    public static final String CAT_SCREEN_START_OFFSET = "[Screen Start Offset]";
+    public static final String CAT_SCREEN_END_OFFSET = "[Screen End Offset]";
     public static final String CAT_DEFAULT_STYLE = "[Default Style]";
     public static final String CAT_LIST_TRANSITION_INFO = "[TransitionType Description Ignore]";
     public static final String CAT_LIST_NAME_INFO = "[Name Style]";
