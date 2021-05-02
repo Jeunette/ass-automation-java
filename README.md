@@ -39,10 +39,6 @@ Here is the link - [OneDrive](https://1drv.ms/f/s!Agy3rSeFledan2j7CXmrBhIkwwZ5).
 
 If you downloaded `win-full` version, you are good to go. You don't need to download an additional programs.
 
-If you downloaded `win-lite` version, you will need to
-download [ffmpeg.exe](https://ffmpeg.org/download.html#build-windows)
-and [ffprobe.exe](https://ffmpeg.org/download.html#build-windows) than drop them into the `bin` folder.
-
 If you downloaded `jar` version for macOS and linux. You will need to have
 the [ffmpeg](https://ffmpeg.org/download.html) & [ffprobe](https://ffmpeg.org/download.html) packages installed.
 
@@ -63,7 +59,7 @@ the [ffmpeg](https://ffmpeg.org/download.html) & [ffprobe](https://ffmpeg.org/do
 
 # How to Start (Windows Only)
 
-1. Download the most recent `[executable]-win-[full/lite].zip` file from
+1. Download the most recent `[executable]-win.zip` file from
    the [release page](https://github.com/Jeunette/ASS-automation-java/releases) and unzip.
 
 2. Double-click on `run.bat` to open the terminal.

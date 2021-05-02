@@ -3,6 +3,6 @@ ffmpeg.exe
 ffprobe.exe
 ffmpeg
 ffprobe
-/ASS-automation-executable/*
+/ASS-automation-release/*
 test.results.temp.txt
 test.formatted_results.temp.txt
