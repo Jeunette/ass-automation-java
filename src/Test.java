@@ -7,8 +7,8 @@ import java.util.Objects;
 
 public class Test {
 
-    public static final String videoPath = "C:\\Users\\luns7\\Downloads\\Video\\[SHANA]event_21-6.mp4";
-    public static final String jsonPath = "C:\\Users\\luns7\\Downloads\\Video\\event_21_06.json";
+    public static final String videoPath = "C:\\Users\\luns7\\Downloads\\Video\\[SHANA]event_21-4.mp4";
+    public static final String jsonPath = "C:\\Users\\luns7\\Downloads\\Video\\event_21_04.json";
 
     public static void main(String[] args) throws IOException, InterruptedException {
         currentSystem = System.getProperty("os.name").toLowerCase();

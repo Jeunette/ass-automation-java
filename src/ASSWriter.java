@@ -45,26 +45,32 @@ public class ASSWriter {
         String locationDescription = handler.getDescription(TYPE_LOCATION);
         // String jitterDescription = handler.getDescription(TYPE_JITTER);
         int[] imageRef = new int[imageSections.size()];
+        int[] snippetRef = new int[snippetSections.size()];
         int refTemp = 1;
         for (int i = 1; i < snippetSections.size(); i++) {
             for (int j = refTemp; j < imageSections.size(); j++) {
                 if (snippetSections.get(i).dialogueCount > 2 && Math.abs(j - i) <= Math.abs(imageSections.size() - snippetSections.size())
                         && snippetSections.get(i).dialogueCount == imageSections.get(j).dialogueCount) {
                     imageRef[j] = i;
+                    snippetRef[i] = j;
                     refTemp = j + 1;
                     break;
                 }
             }
         }
         for (int i = 1; i < imageRef.length; i++) {
-            if (imageRef[i] == 0 && imageRef[i - 1] != 0 && imageRef[i - 1] + 1 < snippetSections.size()
-                    && snippetSections.get(imageRef[i - 1] + 1).dialogueCount == imageSections.get(i).dialogueCount)
+            if (imageRef[i] == 0 && imageRef[i - 1] != 0 && imageRef[i - 1] + 1 < snippetSections.size() && snippetRef[imageRef[i - 1] + 1] == 0
+                    && snippetSections.get(imageRef[i - 1] + 1).dialogueCount == imageSections.get(i).dialogueCount) {
                 imageRef[i] = imageRef[i - 1] + 1;
+                snippetRef[imageRef[i]] = i;
+            }
         }
         for (int i = imageRef.length - 2; i >= 0; i--) {
-            if (imageRef[i] == 0 && imageRef[i + 1] != 0 && imageRef[i + 1] - 1 >= 0
-                    && snippetSections.get(imageRef[i + 1] - 1).dialogueCount == imageSections.get(i).dialogueCount)
+            if (imageRef[i] == 0 && imageRef[i + 1] != 0 && imageRef[i + 1] - 1 >= 0 && snippetRef[imageRef[i + 1] - 1] == 0
+                    && snippetSections.get(imageRef[i + 1] - 1).dialogueCount == imageSections.get(i).dialogueCount) {
                 imageRef[i] = imageRef[i + 1] - 1;
+                snippetRef[imageRef[i]] = i;
+            }
         }
         int sum = 0;
         for (int i = 1; i < imageSections.size(); i++) { sum += imageSections.get(i).dialogues.size(); }
