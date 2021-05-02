@@ -194,7 +194,7 @@ public class ImageSystem {
             Thread.sleep(2000);
         }
         this.files = this.directory.list();
-        processImages(new ColorAnalyzer(ImageIO.read(new FileInputStream(directory.getAbsolutePath() + "\\" + files[0]))));
+        processImages(new ColorAnalyzer(ImageIO.read(new FileInputStream(directory.getAbsolutePath() + "/" + files[0]))));
         System.out.println("ImageSystem initialized.");
     }
 

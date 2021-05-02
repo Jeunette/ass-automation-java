@@ -1,12 +1,38 @@
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.Scanner;
 
 public class Run {
 
-    public static void main (String[] args) throws IOException, InterruptedException {
+    private static final String LINUX = "Linux";
+    private static final String[] BASH = new String[]{""};
+    private static final String[] BASH_REMOVE_DIR = new String[]{"rm", "-rf", ""};
+    private static final String[] BASH_GET_TIMESTAMP = new String[]{"./get_timestamp-frame-info.sh", null};
+    private static final String[] BASH_VIDEO_TO_FRAME = new String[]{"./video2frames.sh", null};
+
+    private static final String MAC_OS = "macOS";
+    private static final String[] TERM = new String[]{""};
+    private static final String[] TERM_REMOVE_DIR = new String[]{"", null};
+    private static final String[] TERM_GET_TIMESTAMP = new String[]{"./get_timestamp-frame-info.sh", null};
+    private static final String[] TERM_VIDEO_TO_FRAME = new String[]{"./video2frames.sh", null};
+
+    private static final String WINDOWS = "Windows";
+    private static final String[] CMD = new String[]{"cmd", "/C", "start", "cmd.exe", "/C", ""};
+    private static final String[] CMD_REMOVE_DIR = new String[]{"rmdir", "/s", "/q", null};
+    private static final String[] CMD_GET_TIMESTAMP = new String[]{"get_timestamp-frame-info.bat", null};
+    private static final String[] CMD_VIDEO_TO_FRAME = new String[]{"video2frames.bat", null};
+
+    public static String currentSystem;
+    public static String[] shell;
+
+    public static void main(String[] args) throws IOException, InterruptedException {
+        currentSystem = System.getProperty("os.name").toLowerCase();
+        shell = isWindows() ? CMD.clone() : isMac() ? TERM.clone() : BASH.clone();
+        currentSystem = isWindows() ? WINDOWS : isMac() ? MAC_OS : LINUX;
         String videoPath, jsonPath;
-        if (args.length != 2 || args[0].length() == 0 || args[1].length() ==0) {
+        if (args.length != 2 || args[0].length() == 0 || args[1].length() == 0) {
             System.out.println("Arguments invalid / not detected. ");
             System.out.println("Entering manual input mode... ");
             Scanner scanner = new Scanner(System.in);
@@ -31,30 +57,20 @@ public class Run {
             System.exit(1);
         }
         System.out.println("TASK: " + mp4.getName());
-        File dir = new File(mp4.getAbsolutePath() + ".temp\\");
+        File dir = new File(mp4.getAbsolutePath() + ".temp/");
         if (!dir.isDirectory()) //noinspection ResultOfMethodCallIgnored
             dir.mkdir();
-        File ref = new File(dir.getAbsolutePath() + "\\" + mp4.getName() + ".txt");
-        File frames = new File(dir.getAbsolutePath() + "\\frames");
-        File data = new File(dir.getAbsolutePath() + "\\" + mp4.getName() + ".data.txt");
+        File ref = new File(dir.getAbsolutePath() + "/" + mp4.getName() + ".txt");
+        File frames = new File(dir.getAbsolutePath() + "/frames");
+        File data = new File(dir.getAbsolutePath() + "/" + mp4.getName() + ".data.txt");
         if (!dir.isDirectory() || !ref.isFile()) {
             if (!ref.isFile()) {
-                try {
-                    String command = "get_timestamp-frame-info.bat \"" + mp4.getAbsolutePath() + "\"";
-                    Runtime.getRuntime().exec("cmd /C start cmd.exe /C " + command);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                getTimestamp(mp4.getAbsolutePath());
             }
             if (!data.isFile() && (!frames.isDirectory() || Objects.requireNonNull(frames.list()).length == 0)) {
                 //noinspection ResultOfMethodCallIgnored
                 frames.mkdir();
-                try {
-                    String command = "video2frames.bat \"" + mp4.getAbsolutePath() + "\"";
-                    Runtime.getRuntime().exec("cmd /C start cmd.exe /C " + command);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                video2frame(mp4.getAbsolutePath());
             }
         }
         File ass = new File(mp4.getAbsolutePath() + ".ass");
@@ -62,12 +78,7 @@ public class Run {
             System.out.println("Reading from save file...");
             ImageSystem system = new ImageSystem(data);
             if (frames.isDirectory()) {
-                try {
-                    String command = "rmdir /s /q " + frames.getAbsolutePath();
-                    Runtime.getRuntime().exec("cmd /C start cmd.exe /C " + command);
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
+                removeDir(frames.getAbsolutePath());
             }
             //noinspection ResultOfMethodCallIgnored
             ass.delete();
@@ -92,12 +103,7 @@ public class Run {
             //noinspection ResultOfMethodCallIgnored
             data.createNewFile();
             system.save(data);
-            try {
-                String command = "rmdir /s /q " + frames.getAbsolutePath();
-                Runtime.getRuntime().exec("cmd /C start cmd.exe /C " + command);
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
+            removeDir(frames.getAbsolutePath());
             JsonReader reader = new JsonReader(json);
             while (!ref.isFile()) {
                 //noinspection BusyWait
@@ -113,16 +119,64 @@ public class Run {
             System.out.print("Clean save files? (Y/N): ");
             Scanner end = new Scanner(System.in);
             String temp = end.nextLine();
-            if (temp.substring(0,1).equalsIgnoreCase("N")) {
+            if (temp.substring(0, 1).equalsIgnoreCase("N")) {
                 break;
-            } else if (temp.substring(0,1).equalsIgnoreCase("Y")) {
-                try {
-                    String command = "rmdir /s /q " + mp4.getAbsolutePath() + ".temp" ;
-                    Runtime.getRuntime().exec("cmd /C start cmd.exe /C " + command);
-                } catch (IOException e) { e.printStackTrace(); }
+            } else if (temp.substring(0, 1).equalsIgnoreCase("Y")) {
+                removeDir(mp4.getAbsolutePath() + ".temp");
                 break;
             }
         }
+    }
+
+    public static boolean isWindows() {
+        return (currentSystem.contains("win"));
+    }
+
+    public static boolean isMac() {
+        return (currentSystem.contains("mac"));
+    }
+
+    private static void run(String[] command) {
+        ArrayList<String> runtime = new ArrayList<>(Arrays.asList(shell));
+        runtime.addAll(runtime.size() - 1, Arrays.asList(command));
+        try {
+            Runtime.getRuntime().exec(runtime.toArray(new String[0]));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void removeDir(String dir) {
+        String[] command = switch (currentSystem) {
+            case LINUX -> BASH_REMOVE_DIR.clone();
+            case MAC_OS -> TERM_REMOVE_DIR.clone();
+            case WINDOWS -> CMD_REMOVE_DIR.clone();
+            default -> throw new IllegalStateException("Unexpected value: " + currentSystem);
+        };
+        command[command.length - 1] = dir;
+        run(command);
+    }
+
+    private static void getTimestamp(String video) {
+        String[] command = switch (currentSystem) {
+            case LINUX -> BASH_GET_TIMESTAMP.clone();
+            case MAC_OS -> TERM_GET_TIMESTAMP.clone();
+            case WINDOWS -> CMD_GET_TIMESTAMP.clone();
+            default -> throw new IllegalStateException("Unexpected value: " + currentSystem);
+        };
+        command[command.length - 1] = video;
+        run(command);
+    }
+
+    private static void video2frame(String video) {
+        String[] command = switch (currentSystem) {
+            case LINUX -> BASH_VIDEO_TO_FRAME.clone();
+            case MAC_OS -> TERM_VIDEO_TO_FRAME.clone();
+            case WINDOWS -> CMD_VIDEO_TO_FRAME.clone();
+            default -> throw new IllegalStateException("Unexpected value: " + currentSystem);
+        };
+        command[command.length - 1] = video;
+        run(command);
     }
 
 }

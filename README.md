@@ -1,7 +1,7 @@
 # **PJSK Aegisub ASS Automation README**
 
-This project functions to smartly generate the `.ass` files used in Aegisub for `Project SEKAI COLORFUL STAGE!` story
-videos.
+This project functions to smartly generate the `.ass` files used in Aegisub
+for [Project SEKAI COLORFUL STAGE!](https://pjsekai.sega.jp/) story videos.
 
 # Important Notice
 
@@ -33,23 +33,40 @@ are my own recordings, those recordings mainly serve as my contribution to the t
 
 Here is the link - [OneDrive](https://1drv.ms/f/s!Agy3rSeFledan2j7CXmrBhIkwwZ5).
 
+---
+
+# Required Third Party Programs
+
+If you downloaded `win-full` version, you are good to go. You don't need to download an additional programs.
+
+If you downloaded `win-lite` version, you will need to
+download [ffmpeg.exe](https://ffmpeg.org/download.html#build-windows)
+and [ffprobe.exe](https://ffmpeg.org/download.html#build-windows) than drop them into the `bin` folder.
+
+If you downloaded `jar` version for macOS and linux. You will need to have
+the [ffmpeg](https://ffmpeg.org/download.html) & [ffprobe](https://ffmpeg.org/download.html) packages installed.
+
+* For macOS, refer ["ffmpeg - Homebrew Formulae"](https://formulae.brew.sh/formula/ffmpeg).
+
+* For linux, refer ["How to Install FFmpeg in Linux"](https://www.tecmint.com/install-ffmpeg-in-linux/).
+
 ## Other Necessary Programs and Files
 
 * [Aegisub](https://github.com/Aegisub/Aegisub/releases) for editing the `.ass` files after the code runs.
-* `"typeWriter v1.1.lua"` an Aegisub automation plugin can be found in `"help\Aegisub Automation\"` with its guild. This
-  plugin is used in Aegisub to manipulate the typewriter effect of dialogue texts in game.
+* ["typeWriter v1.1 [LANG].lua"]() an Aegisub automation plugin can be found in `"help\Aegisub Automation\"` with its
+  guild. This plugin can be used in Aegisub to manipulate the typewriter effect of dialogue texts in game.
 * [Avidemux](http://avidemux.sourceforge.net/download.html) for burning the `.ass` files into videos and adding filters
   to the original version video from my video library. See *Additional Help* section "burning `.ass` and adding filters
   to video" for details.
 
 ---
 
-# How to Start
+# How to Start (Windows Only)
 
-1. Download the most recent `[executable].zip` file from
+1. Download the most recent `[executable]-win-[full/lite].zip` file from
    the [release page](https://github.com/Jeunette/ASS-automation-java/releases) and unzip.
 
-2. Double click on `run.bat` to open the terminal.
+2. Double-click on `run.bat` to open the terminal.
 
 3. Commands and usages will be automatically printed at the top of the terminal.
 
@@ -70,7 +87,7 @@ Here is the link - [OneDrive](https://1drv.ms/f/s!Agy3rSeFledan2j7CXmrBhIkwwZ5).
 
 * `ass` will start the process in a new tab and allow multiple runs.
 
-* `run` and `ass` will run with or without arguments. Runs without arguments will prompt you to enter the path of the
+* `run` & `ass` will run with or without arguments. Runs without arguments will prompt you to enter the path of the
   files. You can drag and drop the files from File Explorer into the terminal to automatically get the path.
 
 * `compress` is only needed if you encounter an error in running ffmpeg.
@@ -78,8 +95,6 @@ Here is the link - [OneDrive](https://1drv.ms/f/s!Agy3rSeFledan2j7CXmrBhIkwwZ5).
 * `compress` is only confirmed to be effective on the original version `MP4` videos from my video library or iOS
   recordings in `MP4` format (unedited video otherwise it will be in `MOV` format which probably don't need to be
   compressed).
-
-* Current version only works on Windows.
 
 ---
 
@@ -148,7 +163,7 @@ correct. Both sections will be provided. `json` file section is commented.**
 
 In the second case, at the end of a run, if the code detected the location transitions found in the video sections is
 smaller than what is in the `.json` file sections, it will print a `CRITICAL_ERROR` message to ask you to find the
-missing ones. This usually comes with other error messages and most likely to be major problems.
+missing ones. This usually comes with other error messages and, most likely, to be major problems.
 
     CRITICAL_ERROR: Location Transition amount mismatched.
     Location transition discovered:     #
@@ -166,10 +181,10 @@ be seeing this. If this is the case, you might use the wrong `json` file otherwi
 
 # Ending Prompt
 
-Let's say what if you accidently used the wrong `json` file? Or you want to see the messages again.
+Let's say what if you accidentally used the wrong `json` file? Or you want to see the messages again.
 
-The terminal will prompt the following message to ask you whether or not to delete the save files. The save files work
-as a save point that can load the messages and **rebuild the `.ass` file** real quick by simply re-run the `run`
+The terminal will prompt the following message to ask you whether to delete the save files. The save files work as a
+save point that can load the messages and **rebuild the `.ass` file** real quick by simply re-run the `run`
 or `ass` command.
 
 **MAKE SURE YOU DON'T ACCIDENTALLY DELETE YOUR `.ASS` FILE.**
@@ -214,8 +229,8 @@ can easily fix this problem. See [Styles - Aegisub Handout](https://aegi.vmoe.in
     path_to_ass_file
 
 Next, you have `[Default Style]` that records the default style from the `.ass` file defined in the last section. The
-default style will be used in runtime to prompt you for whether or not to use an unrecorded `speaker_name` (see details
-in later section `[Name Style]`).
+default style will be used in runtime to prompt you for whether to use an unrecorded `speaker_name` (see details in
+later section `[Name Style]`).
 
     [Default Style]
     default_style_to_use_in_ass_file
@@ -277,8 +292,8 @@ Additional Help* section "creating a mask in Aegisub" for how to create a mask.
     [SCREEN TEXT]
     aegisub_tags_and_text
 
-Next, you have `[LOCATION SCREEN TEXT]` (the mask) and `[LOCATION TEXT]` (the text one the mask). These are for the mask
-and the subtitle text of location transitions similar to `[SCREEN TEXT]`.
+Next, you have `[LOCATION SCREEN TEXT]` (the mask) and `[LOCATION TEXT]` (the text one the mask). These are for the
+mask, and the subtitle text of location transitions similar to `[SCREEN TEXT]`.
 
     [LOCATION SCREEN TEXT]
     aegisub_tags_and_text
@@ -309,10 +324,10 @@ The following guilds are available in the `[executable].zip` file from
 the [release page](https://github.com/Jeunette/ASS-automation-java/releases).
 
 * For `settings.txt` and `[reference].txt`, see `"help\[LANG]\Settings and Reference\*.png"`.
-* For creating a mask in Aegisub, see `"help\[LANG]\Creating Masks in Aegisub.pdf"`.
+* For creating a mask in Aegisub, see `"help\[LANG]\Creating Masks in Aegisub.pdf"`. [(WIP)]()
 * For burning `.ass` and adding filters to video, see `"help\[LANG]\How to Use Avidemux.pdf"`.
 
-If you have further questions feel free to contact me via Discord - Jeunette🍹#6870 (yes, there is a emoji XD) - or
+If you have further questions feel free to contact me via Discord - Jeunette🍹#6870 (yes, there is an emoji XD) - or
 join [this server](https://discord.gg/pHCj3tjYwF).
 
 ---
@@ -321,7 +336,7 @@ join [this server](https://discord.gg/pHCj3tjYwF).
 
 This section is only for source code.
 
-## Required external files
+## Required External Files
 
-* ffmpeg.exe ([ffmpeg.org](https://ffmpeg.org/download.html#build-windows))
-* ffprobe.exe ([ffmpeg.org](https://ffmpeg.org/download.html#build-windows))
+* [ffmpeg](https://ffmpeg.org/download.html)
+* [ffprobe](https://ffmpeg.org/download.html)
