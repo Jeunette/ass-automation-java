@@ -8,7 +8,7 @@ public class ImageSystem {
     private static final int MAX_ACCEPTABLE_DIFFERENCE_DEFAULT = 18;
     private static final int MIN_BOX_BORDER_DIFFERENCE_DEFAULT = 15;
     private static final int MAX_WHITE_STACK_DEFAULT = 15;
-    private static final double REF_GAP_DEFAULT = 7.0;
+    private static final double REF_GAP_DEFAULT = 5.0;
     private static final double CON_GAP_DEFAULT = 2.0;
 
     private static final int[] MIN_BOX_COLOR_DEFAULT = {225, 225, 225};
@@ -157,7 +157,7 @@ public class ImageSystem {
                 && validateDiff(rgbDifference(data.box, boxRef), -MAX_ACCEPTABLE_DIFFERENCE, MAX_ACCEPTABLE_DIFFERENCE, 1)
                 && validateDiff(rgbDifference(data.border, borderRef), -MAX_ACCEPTABLE_DIFFERENCE, MAX_ACCEPTABLE_DIFFERENCE, 1)
                 && validateDiff(rgbDifference(data.border, data.box), MIN_BOX_BORDER_DIFFERENCE, 255, 1)
-                && !validateDiff(rgbDifference(data.border, data.box), 0, 0, 1);
+                && !validateDiff(rgbDifference(data.border, data.box), (int) -CON_GAP, (int) CON_GAP, 1);
     }
 
     public boolean isIn(ImageDataResult previous, ImageDataResult current) {

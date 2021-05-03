@@ -195,14 +195,19 @@ public class ASSWriter {
         Event image = imageSections.get(i).screen;
         sections.getLast().screen = new Event(image.style, image.name, image.text, false, true);
         sections.getLast().screen.setTime(image.startTime, image.endTime);
+        int diff = imageSections.get(i).dialogues.size() - snippetSections.get(i2).dialogues.size();
+        for (int j = 0; j < diff; j++) {
+            image = imageSections.get(i).dialogues.get(j);
+            sections.getLast().dialogues.add(new Event(CAUTION, ERROR, null, false, false));
+            sections.getLast().dialogues.getLast().setTime(image.startTime, image.endTime);
+        }
         for (int j = 0; j < snippetSections.get(i2).dialogues.size(); j++) {
             snippet = snippetSections.get(i2).dialogues.get(j);
-            int diff = imageSections.get(i).dialogues.size() - snippetSections.get(i2).dialogues.size();
-            if (j < diff) {
-                sections.getLast().dialogues.add(new Event(snippet.style, snippet.name, ERROR + " -> " + snippet.text, snippet.fade, true));
+            if (j + diff < 0) {
+                sections.getLast().dialogues.add(new Event(snippet.style, snippet.name, ERROR + " -> " + snippet.text, snippet.fade, false));
                 sections.getLast().dialogues.getLast().setTime(image.startTime, image.startTime);
             } else {
-                image = imageSections.get(i).dialogues.get(Math.min(j + (Math.max(diff, 0)), imageSections.get(i).dialogues.size() - 1));
+                image = imageSections.get(i).dialogues.get(j + diff);
                 sections.getLast().dialogues.add(new Event(snippet.style, snippet.name, snippet.text, snippet.fade, false));
                 sections.getLast().dialogues.getLast().setTime(image.startTime, image.endTime);
             }
