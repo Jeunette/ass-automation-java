@@ -1,9 +1,9 @@
 <component name="ArtifactManager">
   <artifact build-on-make="true" name="ASS-automation-jar">
-    <output-path>$PROJECT_DIR$/ASS-automation-release/ASS-automation-win-jar</output-path>
+    <output-path>$PROJECT_DIR$/release/ASS-automation-jar</output-path>
     <root id="root">
       <element id="directory" name="help">
-        <element id="dir-copy" path="$PROJECT_DIR$/ASS-automation-release/ASS-automation-win-scr/help" />
+        <element id="dir-copy" path="$PROJECT_DIR$/release/ASS-automation-win-scr/help" />
       </element>
       <element id="file-copy" path="$PROJECT_DIR$/[1920x1342]reference.txt" />
       <element id="file-copy" path="$PROJECT_DIR$/[1920x1440]reference.txt" />

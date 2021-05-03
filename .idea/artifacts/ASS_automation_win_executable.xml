@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
   <artifact build-on-make="true" name="ASS-automation-win-executable">
-    <output-path>$PROJECT_DIR$/ASS-automation-release/ASS-automation-win-executable</output-path>
+    <output-path>$PROJECT_DIR$/release/ASS-automation-win-executable</output-path>
     <root id="root">
       <element id="directory" name="bin">
         <element id="file-copy" path="$PROJECT_DIR$/[1920x1342]reference.txt" />
@@ -10,10 +10,10 @@
         <element id="archive" name="ASS-automation-java.jar">
           <element id="module-output" name="ASS-automation-java" />
         </element>
-        <element id="dir-copy" path="$PROJECT_DIR$/ASS-automation-release/ASS-automation-win-scr/bin" />
-        <element id="file-copy" path="$PROJECT_DIR$/ASS-automation-release/ASS-automation-win-scr/bin/ass.bat" />
-        <element id="file-copy" path="$PROJECT_DIR$/ASS-automation-release/ASS-automation-win-scr/bin/CompressVideo.java" />
-        <element id="file-copy" path="$PROJECT_DIR$/ASS-automation-release/ASS-automation-win-scr/bin/mp4compression.bat" />
+        <element id="dir-copy" path="$PROJECT_DIR$/release/ASS-automation-win-scr/bin" />
+        <element id="file-copy" path="$PROJECT_DIR$/release/ASS-automation-win-scr/bin/ass.bat" />
+        <element id="file-copy" path="$PROJECT_DIR$/release/ASS-automation-win-scr/bin/CompressVideo.java" />
+        <element id="file-copy" path="$PROJECT_DIR$/release/ASS-automation-win-scr/bin/mp4compression.bat" />
         <element id="file-copy" path="$PROJECT_DIR$/get_timestamp-frame-info.sh" />
         <element id="file-copy" path="$PROJECT_DIR$/get_timestamp-frame-info.bat" />
         <element id="file-copy" path="$PROJECT_DIR$/video2frames.bat" />
@@ -22,9 +22,9 @@
         <element id="file-copy" path="$PROJECT_DIR$/ffprobe.exe" />
       </element>
       <element id="directory" name="help">
-        <element id="dir-copy" path="$PROJECT_DIR$/ASS-automation-release/ASS-automation-win-scr/help" />
+        <element id="dir-copy" path="$PROJECT_DIR$/release/ASS-automation-win-scr/help" />
       </element>
-      <element id="file-copy" path="$PROJECT_DIR$/ASS-automation-release/ASS-automation-win-scr/run.bat" />
+      <element id="file-copy" path="$PROJECT_DIR$/release/ASS-automation-win-scr/run.bat" />
       <element id="file-copy" path="$PROJECT_DIR$/README.md" />
     </root>
   </artifact>

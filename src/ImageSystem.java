@@ -8,7 +8,8 @@ public class ImageSystem {
     private static final int MAX_ACCEPTABLE_DIFFERENCE_DEFAULT = 18;
     private static final int MIN_BOX_BORDER_DIFFERENCE_DEFAULT = 15;
     private static final int MAX_WHITE_STACK_DEFAULT = 15;
-    private static final double REF_GAP_DEFAULT = 15.0;
+    private static final double POS_GAP_DEFAULT = 15.0;
+    private static final double REF_GAP_DEFAULT = 5.0;
     private static final double CON_GAP_DEFAULT = 2.0;
 
     private static final int[] MIN_BOX_COLOR_DEFAULT = {225, 225, 225};
@@ -17,6 +18,7 @@ public class ImageSystem {
     private int MAX_ACCEPTABLE_DIFFERENCE;
     private int MIN_BOX_BORDER_DIFFERENCE;
     private int MAX_WHITE_STACK;
+    private double POS_GAP;
     private double REF_GAP;
     private double CON_GAP;
 
@@ -27,6 +29,7 @@ public class ImageSystem {
         MAX_ACCEPTABLE_DIFFERENCE = MAX_ACCEPTABLE_DIFFERENCE_DEFAULT;
         MIN_BOX_BORDER_DIFFERENCE = MIN_BOX_BORDER_DIFFERENCE_DEFAULT;
         MAX_WHITE_STACK = MAX_WHITE_STACK_DEFAULT;
+        POS_GAP = POS_GAP_DEFAULT;
         REF_GAP = REF_GAP_DEFAULT;
         CON_GAP = CON_GAP_DEFAULT;
         MIN_BOX_COLOR = MIN_BOX_COLOR_DEFAULT;
@@ -41,6 +44,10 @@ public class ImageSystem {
         }
         try {
             MAX_WHITE_STACK = Integer.parseInt(SettingsHandler.reader(SettingsHandler.CAT_MAX_WHITE_STACK));
+        } catch (Exception ignored) {
+        }
+        try {
+            POS_GAP = Double.parseDouble(SettingsHandler.reader(SettingsHandler.CAT_POS_GAP));
         } catch (Exception ignored) {
         }
         try {
@@ -155,9 +162,9 @@ public class ImageSystem {
     public boolean isDialogue(ImageData data) {
         return !validateDiff(rgbDifference(MIN_BOX_COLOR, data.main), -255, 0)
                 && (validateDiff(rgbDifference(data.box, boxRef), -MAX_ACCEPTABLE_DIFFERENCE, MAX_ACCEPTABLE_DIFFERENCE, 1)
-                || validateDiff(rgbDifference(data.box, boxRef), -REF_GAP, REF_GAP, 3))
+                || validateDiff(rgbDifference(data.box, boxRef), -POS_GAP, POS_GAP, 3))
                 && (validateDiff(rgbDifference(data.border, borderRef), -MAX_ACCEPTABLE_DIFFERENCE, MAX_ACCEPTABLE_DIFFERENCE, 1)
-                || validateDiff(rgbDifference(data.border, borderRef), -REF_GAP, REF_GAP, 3))
+                || validateDiff(rgbDifference(data.border, borderRef), -POS_GAP, POS_GAP, 3))
                 && validateDiff(rgbDifference(data.border, data.box), MIN_BOX_BORDER_DIFFERENCE, 255, 1)
                 && !validateDiff(rgbDifference(data.border, data.box), -CON_GAP, CON_GAP, 1);
     }
@@ -171,7 +178,7 @@ public class ImageSystem {
     }
 
     public boolean isStart(ImageDataResult current, ImageData previousData, ImageData currentData) {
-        if (current.in || !validateDiff(rgbDifference(previousData.ref, currentData.ref), CON_GAP)) {
+        if (current.in || !validateDiff(rgbDifference(previousData.ref, currentData.ref), REF_GAP)) {
             whiteStack = 0;
             return true;
         } else {
@@ -257,10 +264,6 @@ public class ImageSystem {
             }
             results.add(current);
         }
-        System.out.println(Arrays.toString(borderRef[0]));
-        System.out.println(Arrays.toString(borderRef[1]));
-        System.out.println(Arrays.toString(borderRef[2]));
-        System.out.println(Arrays.toString(borderRef[3]));
         results.add(tempResults.poll());
         System.out.println("Results generated.");
     }

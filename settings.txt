@@ -66,13 +66,8 @@ KAITOの声 KAITO
 まふゆの声 朝比奈まふゆ
 絵名の声 東雲絵名
 瑞希の声 暁山瑞希
-screen screen
-観客A 関連人物
-観客B 関連人物
-杏の父 関連人物
-観客達 関連人物
 ？？？ 関連人物
-新 関連人物
+screen screen
 /[Name Style]
 
 [TransitionType Description Ignore]

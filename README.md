@@ -137,20 +137,29 @@ time code for some lines in the section.
 
 # ERROR
 
-If the code can not directly match a section of events from the video with the section from the correlating `json` file,
-it will print a `ERROR` message when the algorithm combined sections mismatch with each other with 1 line counts
-difference. **You will need to inspect and modify the sections to make them correct. Both sections will be provided.
-Video section is commented.**
+2 types of `ERROR` messages will display for different situations.
+
+In the first case, if the code can not directly match a section of events from the video with the section from the
+correlating `json` file, it will print a `ERROR` message when the algorithm combined sections mismatch with each other
+with 1 line counts difference. **You will need to inspect and modify the sections to make them correct. Both sections
+will be provided. Video section is commented.**
 
     > Matching ImageSystem section(s) [#, ...] with Snippets section(s) [#, ...]
     > ERROR: Single line mismatched in section # (#:##:##.## - #:##:##.##).
+
+In the second case, if the code find an empty section and is unable to group it into a combination, it will print
+a `ERROR` message when the algorithm combined sections mismatch with each other with 1 line counts difference. This
+means there is a possible shift **OR** distortion in the starting or ending timestamp of a line. **You will need to
+inspect and modify the sections to make them correct.**
+
+    > ERROR: Shift (empty section) found in section # (#:##:##.## - #:##:##.##).
 
 # CRITICAL_ERROR
 
 2 types of `CRITICAL_ERROR` messages will display for different situations.
 
 In the first case, if the code can not directly match a section of events from the video with the section from the
-correlating `json` file, it will print a `CRITICAL_ERROR` message when the algorithm combined sections mismatch with the
+correlating `json` file, it will print a `CRITICAL_ERROR` message when the algorithm combined sections mismatch with
 each other with line counts difference greater than 1. **You will need to inspect and modify the sections to make them
 correct. Both sections will be provided. `json` file section is commented.**
 

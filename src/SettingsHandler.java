@@ -10,6 +10,7 @@ public class SettingsHandler {
     public static final String CAT_MAX_ACCEPTABLE_DIFFERENCE = "[Max Acceptable Color Difference]";
     public static final String CAT_MIN_BOX_BORDER_DIFFERENCE = "[Box Border Difference]";
     public static final String CAT_MAX_WHITE_STACK = "[Singe Width White Frames]";
+    public static final String CAT_POS_GAP = "[Box Border Ref Gap]";
     public static final String CAT_REF_GAP = "[Reference Char Gap]";
     public static final String CAT_CON_GAP = "[Continuous Gap]";
     public static final String CAT_MIN_BOX_COLOR = "[Min Box Color]";

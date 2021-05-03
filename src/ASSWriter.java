@@ -73,14 +73,18 @@ public class ASSWriter {
             }
         }
         int sum = 0;
-        for (int i = 1; i < imageSections.size(); i++) { sum += imageSections.get(i).dialogues.size(); }
+        for (int i = 1; i < imageSections.size(); i++) {
+            sum += imageSections.get(i).dialogueCount;
+        }
         System.out.printf("ImageSystems section size: %02d - %03d | ", imageSections.size(), sum);
         for (int i = 1; i < imageRef.length; i++) {
             System.out.printf("[%02d] ", i);
         }
         System.out.println();
         sum = 0;
-        for (int i = 1; i < snippetSections.size(); i++) { sum += snippetSections.get(i).dialogues.size(); }
+        for (int i = 1; i < snippetSections.size(); i++) {
+            sum += snippetSections.get(i).dialogueCount;
+        }
         System.out.printf("Snippets sections size:    %02d - %03d | ", snippetSections.size(), sum);
         for (int i = 1; i < imageRef.length; i++) {
             System.out.printf("[%02d] ", imageRef[i]);
@@ -139,7 +143,7 @@ public class ASSWriter {
                         tempImageSection.getFirst().screen.text = IGNORE_TEXT;
                         if (imageIndex + 1 < imageSections.size())
                             tempImageSection.add(imageSections.get(imageIndex + 1));
-                        if (tempImageSection.getFirst().dialogues.size() == tempSnippetSection.getFirst().dialogues.size()) {
+                        if (tempImageSection.getFirst().dialogueCount == tempSnippetSection.getFirst().dialogueCount) {
                             System.out.println("\033[1;93mATTENTION\u001B[0m: Paired combination in \033[1;97msection " + i + "*\u001B[0m ("
                                     + imageSections.get(i).screen.start + " - " + imageSections.get(i).screen.end + ").");
                             for (int j = i; j <= imageIndex; j++) {
@@ -150,7 +154,7 @@ public class ASSWriter {
                             sections.get(i).dialogues.getFirst().setTime(imageSections.get(i).screen.startTime, imageSections.get(imageIndex).screen.endTime);
                             fillSections(sections, tempImageSection, tempSnippetSection, 0, 0, locationDescription, locationScreenText, locationText);
                         } else {
-                            if (Math.abs(tempImageSection.getFirst().dialogues.size() - tempSnippetSection.getFirst().dialogues.size()) <= 1) {
+                            if (Math.abs(tempImageSection.getFirst().dialogueCount - tempSnippetSection.getFirst().dialogueCount) <= 1) {
                                 System.out.println("\033[1;95mERROR\033[0m: Single line mismatched in \033[1;97msection " + i + "*\u001B[0m ("
                                         + imageSections.get(i).screen.start + " - " + imageSections.get(i).screen.end + ").");
                                 for (int j = i; j <= imageIndex; j++) {
@@ -161,7 +165,7 @@ public class ASSWriter {
                                 sections.get(i).dialogues.getFirst().setTime(imageSections.get(i).screen.startTime, imageSections.get(imageIndex).screen.endTime);
                                 fillSections(sections, tempImageSection, tempSnippetSection, 0, 0, locationDescription, locationScreenText, locationText);
                             } else {
-                                System.out.println("\033[1;91mCRITICAL_ERROR\033[0m: " + (tempImageSection.getFirst().dialogues.size() - tempSnippetSection.getFirst().dialogues.size())
+                                System.out.println("\033[1;91mCRITICAL_ERROR\033[0m: " + (tempImageSection.getFirst().dialogueCount - tempSnippetSection.getFirst().dialogueCount)
                                         + " lines mismatched in \033[1;97msection " + i + "*\u001B[0m (" + imageSections.get(i).screen.start + " - " + imageSections.get(i).screen.end + ").");
                                 fillSections(sections, tempImageSection, tempSnippetSection, 0, 0, locationDescription, locationScreenText, locationText);
                                 sections.getLast().comment();
@@ -173,11 +177,17 @@ public class ASSWriter {
                             }
                         }
                         i += imageIndex - i;
-                    }else if (imageSections.get(i).dialogues.size() != 0){
+                    } else if (imageSections.get(i).dialogueCount != 0) {
                         System.out.println("\033[1;91mCRITICAL_ERROR\033[0m: None matches for \033[1;97msection " + i + "\u001B[0m ("
                                 + imageSections.get(i).screen.start + " - " + imageSections.get(i).screen.end + ").");
                         sections.add(imageSections.get(i));
                         sections.getLast().dialogues.addFirst(new Event(CAUTION, CRITICAL, CRITICAL_TEXT, false, true));
+                        sections.getLast().dialogues.getFirst().setTime(imageSections.get(i).screen.startTime, imageSections.get(i).screen.endTime);
+                    } else if (imageSections.get(i).dialogueCount == 0 && (i == 1 || imageSections.get(i - 1).dialogueCount != 0)) {
+                        System.out.println("\033[1;95mERROR\033[0m: Shift (empty section) found in \033[1;97msection " + i + "\u001B[0m ("
+                                + imageSections.get(i).screen.start + " - " + imageSections.get(i).screen.end + ").");
+                        sections.add(imageSections.get(i));
+                        sections.getLast().dialogues.addFirst(new Event(CAUTION, ERROR, ERROR_TEXT, false, true));
                         sections.getLast().dialogues.getFirst().setTime(imageSections.get(i).screen.startTime, imageSections.get(i).screen.endTime);
                     }
                 }
@@ -195,21 +205,24 @@ public class ASSWriter {
         Event image = imageSections.get(i).screen;
         sections.getLast().screen = new Event(image.style, image.name, image.text, false, true);
         sections.getLast().screen.setTime(image.startTime, image.endTime);
-        int diff = imageSections.get(i).dialogues.size() - snippetSections.get(i2).dialogues.size();
+        int diff = imageSections.get(i).dialogueCount - snippetSections.get(i2).dialogueCount;
         for (int j = 0; j < diff; j++) {
             image = imageSections.get(i).dialogues.get(j);
             sections.getLast().dialogues.add(new Event(CAUTION, ERROR, null, false, false));
             sections.getLast().dialogues.getLast().setTime(image.startTime, image.endTime);
+            sections.getLast().dialogueCount++;
         }
-        for (int j = 0; j < snippetSections.get(i2).dialogues.size(); j++) {
+        for (int j = 0; j < snippetSections.get(i2).dialogueCount; j++) {
             snippet = snippetSections.get(i2).dialogues.get(j);
             if (j + diff < 0) {
                 sections.getLast().dialogues.add(new Event(snippet.style, snippet.name, ERROR + " -> " + snippet.text, snippet.fade, false));
                 sections.getLast().dialogues.getLast().setTime(image.startTime, image.startTime);
+                sections.getLast().dialogueCount++;
             } else {
                 image = imageSections.get(i).dialogues.get(j + diff);
                 sections.getLast().dialogues.add(new Event(snippet.style, snippet.name, snippet.text, snippet.fade, false));
                 sections.getLast().dialogues.getLast().setTime(image.startTime, image.endTime);
+                sections.getLast().dialogueCount++;
             }
         }
         EventSection transitions = new EventSection();
@@ -234,7 +247,7 @@ public class ASSWriter {
                 locationCount++;
             }
         }
-        if (transitions.transitions.size() != snippetSections.get(i2).transitionCount) {
+        if (transitions.transitionCount != snippetSections.get(i2).transitionCount) {
             System.out.println("\033[1;95mDISTORTION\033[0m: Distortion transition(s) / effect(s) found in \033[1;97msection " + ((i != 0) ? "" + i : "combined") + "\u001B[0m ("
                     + imageSections.get(i).screen.start + " - " + imageSections.get(i).screen.end + ").");
             sections.getLast().dialogues.addFirst(new Event(CAUTION, DISTORTION, DISTORTION_TEXT, false, false));
@@ -247,7 +260,7 @@ public class ASSWriter {
     public static void printSections(LinkedList<EventSection> sections) {
         System.out.println(sections.toString());
         for (int i = 0; i < sections.size(); i++) {
-            System.out.println("Section: " + i + " Size :" + sections.get(i).dialogues.size());
+            System.out.println("Section: " + i + " Size :" + sections.get(i).dialogueCount);
             System.out.println(sections.get(i).screen);
             for (int j = 0; j < sections.get(i).dialogueCount; j++) {
                 System.out.println(sections.get(i).dialogues.get(j));
@@ -261,7 +274,7 @@ public class ASSWriter {
     public static void printSectionsSimple(LinkedList<EventSection> sections) {
         System.out.println(sections.toString());
         for (int i = 0; i < sections.size(); i++) {
-            System.out.println("Section: " + i + " Size :" + sections.get(i).dialogues.size());
+            System.out.println("Section: " + i + " Size :" + sections.get(i).dialogueCount);
         }
     }
 
@@ -278,9 +291,11 @@ public class ASSWriter {
                 if (results.get(i).in) timestampIn = timestamps.get(results.get(i).index);
                 if (results.get(i + 1).out) {
                     if (timestamps.get(results.get(i + 1).index) - timestamps.get(results.get(i).index) < MIN_TIME) {
-                        if (sections.getLast().dialogues.size() != 0) {
-                            sections.getLast().screen.setTime(timestampIn, timestamps.get(results.get(i + 1).index + 1)); }
-                        else { sections.getLast().screen.setTime(timestampIn, timestampIn); }
+                        if (sections.getLast().dialogueCount != 0) {
+                            sections.getLast().screen.setTime(timestampIn, timestamps.get(results.get(i + 1).index + 1));
+                        } else {
+                            sections.getLast().screen.setTime(timestampIn, timestampIn);
+                        }
                         sections.add(new EventSection(screenText));
                         if (i + 1 < results.size()) { timestampIn = timestamps.get(results.get(i + 1).index); }
                         continue;
@@ -292,9 +307,11 @@ public class ASSWriter {
                     sections.add(new EventSection(screenText));
                 } else {
                     if (timestamps.get(results.get(i + 1).index) - timestamps.get(results.get(i).index) < MIN_TIME) {
-                        if (sections.getLast().dialogues.size() != 0) {
-                            sections.getLast().screen.setTime(timestampIn, timestamps.get(results.get(i + 1).index + 1)); }
-                        else { sections.getLast().screen.setTime(timestampIn, timestampIn); }
+                        if (sections.getLast().dialogueCount != 0) {
+                            sections.getLast().screen.setTime(timestampIn, timestamps.get(results.get(i + 1).index + 1));
+                        } else {
+                            sections.getLast().screen.setTime(timestampIn, timestampIn);
+                        }
                         sections.add(new EventSection(screenText));
                         if (i + 1 < results.size()) { timestampIn = timestamps.get(results.get(i + 1).index); }
                         continue;
