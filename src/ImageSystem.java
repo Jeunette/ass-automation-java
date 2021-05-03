@@ -8,7 +8,7 @@ public class ImageSystem {
     private static final int MAX_ACCEPTABLE_DIFFERENCE_DEFAULT = 18;
     private static final int MIN_BOX_BORDER_DIFFERENCE_DEFAULT = 15;
     private static final int MAX_WHITE_STACK_DEFAULT = 15;
-    private static final double REF_GAP_DEFAULT = 5.0;
+    private static final double REF_GAP_DEFAULT = 15.0;
     private static final double CON_GAP_DEFAULT = 2.0;
 
     private static final int[] MIN_BOX_COLOR_DEFAULT = {225, 225, 225};
@@ -154,10 +154,12 @@ public class ImageSystem {
 
     public boolean isDialogue(ImageData data) {
         return !validateDiff(rgbDifference(MIN_BOX_COLOR, data.main), -255, 0)
-                && validateDiff(rgbDifference(data.box, boxRef), -MAX_ACCEPTABLE_DIFFERENCE, MAX_ACCEPTABLE_DIFFERENCE, 1)
-                && validateDiff(rgbDifference(data.border, borderRef), -MAX_ACCEPTABLE_DIFFERENCE, MAX_ACCEPTABLE_DIFFERENCE, 1)
+                && (validateDiff(rgbDifference(data.box, boxRef), -MAX_ACCEPTABLE_DIFFERENCE, MAX_ACCEPTABLE_DIFFERENCE, 1)
+                || validateDiff(rgbDifference(data.box, boxRef), -REF_GAP, REF_GAP, 3))
+                && (validateDiff(rgbDifference(data.border, borderRef), -MAX_ACCEPTABLE_DIFFERENCE, MAX_ACCEPTABLE_DIFFERENCE, 1)
+                || validateDiff(rgbDifference(data.border, borderRef), -REF_GAP, REF_GAP, 3))
                 && validateDiff(rgbDifference(data.border, data.box), MIN_BOX_BORDER_DIFFERENCE, 255, 1)
-                && !validateDiff(rgbDifference(data.border, data.box), (int) -CON_GAP, (int) CON_GAP, 1);
+                && !validateDiff(rgbDifference(data.border, data.box), -CON_GAP, CON_GAP, 1);
     }
 
     public boolean isIn(ImageDataResult previous, ImageDataResult current) {
@@ -169,7 +171,7 @@ public class ImageSystem {
     }
 
     public boolean isStart(ImageDataResult current, ImageData previousData, ImageData currentData) {
-        if (current.in || !validateDiff(rgbDifference(previousData.ref, currentData.ref), REF_GAP)) {
+        if (current.in || !validateDiff(rgbDifference(previousData.ref, currentData.ref), CON_GAP)) {
             whiteStack = 0;
             return true;
         } else {
@@ -193,14 +195,15 @@ public class ImageSystem {
             //noinspection BusyWait
             Thread.sleep(2000);
         }
-        this.files = this.directory.list();
-        processImages(new ColorAnalyzer(ImageIO.read(new FileInputStream(directory.getAbsolutePath() + "/" + files[0]))));
+        processImages();
         System.out.println("ImageSystem initialized.");
     }
 
-    private void processImages(ColorAnalyzer analyzer) throws IOException, InterruptedException {
+    private void processImages() throws IOException, InterruptedException {
+        this.files = this.directory.list();
+        ColorAnalyzer analyzer = new ColorAnalyzer(ImageIO.read(new FileInputStream(directory.getAbsolutePath() + "/" + files[0])));
         System.out.println("Analysing images...");
-        for(int index = 0; index < Objects.requireNonNull(this.files).length; ) {
+        for (int index = 0; index < Objects.requireNonNull(this.files).length; ) {
             if (index % 1000 == 0) System.out.println("Processing " + files[index] + "...");
             DataInputStream datainputstream = new DataInputStream(new BufferedInputStream(new FileInputStream(directory.getAbsolutePath() + "/" + files[index])));
             byte[] temp = new byte[datainputstream.available()];
@@ -254,6 +257,10 @@ public class ImageSystem {
             }
             results.add(current);
         }
+        System.out.println(Arrays.toString(borderRef[0]));
+        System.out.println(Arrays.toString(borderRef[1]));
+        System.out.println(Arrays.toString(borderRef[2]));
+        System.out.println(Arrays.toString(borderRef[3]));
         results.add(tempResults.poll());
         System.out.println("Results generated.");
     }
@@ -309,14 +316,24 @@ public class ImageSystem {
 
     private boolean validateDiff(int[] c, int[] min, int[] max) { return c[0] >= min[0] && c[0] <= max [0] && c[1] >= min[1] && c[1] <= max [1] && c[2] >= min[2] && c[2] <= max [2]; }
 
-    private boolean validateDiff(int[] c, double diff) { return ((double) (c[0] + c[1] + c[2])/3) <= diff; }
+    private boolean validateDiff(int[] c, double diff) {
+        return ((double) (c[0] + c[1] + c[2]) / 3) <= diff;
+    }
 
-    private boolean validateDiff(int[] c, double minDiff, double maxDiff) { return ((double) (c[0] + c[1] + c[2])/3) >= minDiff && ((double) (c[0] + c[1] + c[2])/3) <= maxDiff; }
+    private boolean validateDiff(int[] c, double minDiff, double maxDiff) {
+        return ((double) (c[0] + c[1] + c[2]) / 3) >= minDiff && ((double) (c[0] + c[1] + c[2]) / 3) <= maxDiff;
+    }
 
-    private boolean validateDiff(int[][] cs) { return validateDiff(cs[0]) || validateDiff(cs[1]) || validateDiff(cs[2]) || validateDiff(cs[3]); }
+    private boolean validateDiff(int[][] cs) {
+        return validateDiff(cs[0]) || validateDiff(cs[1]) || validateDiff(cs[2]) || validateDiff(cs[3]);
+    }
 
     private boolean validateDiff(int[][] cs, int min, int max, int count) {
-        return (validateDiff(cs[0], min, max) ? 1 : 0) + (validateDiff(cs[1], min, max) ? 1 : 0) + (validateDiff(cs[2], min, max) ? 1 : 0) + (validateDiff(cs[3], min, max) ? 1 :0) >= count;
+        return (validateDiff(cs[0], min, max) ? 1 : 0) + (validateDiff(cs[1], min, max) ? 1 : 0) + (validateDiff(cs[2], min, max) ? 1 : 0) + (validateDiff(cs[3], min, max) ? 1 : 0) >= count;
+    }
+
+    private boolean validateDiff(int[][] cs, double minDiff, double maxDiff, int count) {
+        return (validateDiff(cs[0], minDiff, maxDiff) ? 1 : 0) + (validateDiff(cs[1], minDiff, maxDiff) ? 1 : 0) + (validateDiff(cs[2], minDiff, maxDiff) ? 1 : 0) + (validateDiff(cs[3], minDiff, maxDiff) ? 1 : 0) >= count;
     }
 
 }
