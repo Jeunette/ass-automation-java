@@ -2,10 +2,13 @@ import java.util.Scanner;
 
 public class ImageData {
 
+    public String name;
+
     public int[][] box, border;
     public int[] main, fir, ref;
 
-    public ImageData(int[] main, int[] fir, int[] ref,  int[][] box, int[][] border) {
+    public ImageData(String name, int[] main, int[] fir, int[] ref, int[][] box, int[][] border) {
+        this.name = name;
         this.main = main;
         this.fir = fir;
         this.ref = ref;
@@ -36,6 +39,8 @@ public class ImageData {
 
     public String toString() {
         StringBuilder temp = new StringBuilder();
+        temp.append(name);
+        temp.append("\n");
         temp.append("MAIN: ");
         temp.append(String.format("(%03d, %03d, %03d)", main[0], main[1], main[2]));
         temp.append("\n");

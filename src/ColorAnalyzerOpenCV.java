@@ -2,7 +2,7 @@ import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-public class ColorAnalyzer {
+public class ColorAnalyzerOpenCV {
 
     public static int[] rgbDifference(int[] c1, int[] c2) {
         return new int[]{c2[0] - c1[0], c2[1] - c1[1], c2[2] - c1[2]};
@@ -11,8 +11,6 @@ public class ColorAnalyzer {
     private static final int MAIN_RATE = 4;
     private static final int FIR_RATE = 1;
     private static final int REF_RATE = 1;
-
-    BufferedImage reference;
 
     public ImageData analyse(BufferedImage image, String name) {
         int[] main = areaColor(image, this.boxPos, MAIN_RATE);
@@ -52,8 +50,7 @@ public class ColorAnalyzer {
 
     int[][] firPos, refPos, boxPos, borderPos;
 
-    public ColorAnalyzer(BufferedImage image) throws FileNotFoundException {
-        this.reference = image;
+    public ColorAnalyzerOpenCV() throws FileNotFoundException {
         this.firPos = catReaderMX(SettingsHandler.refReader(SettingsHandler.REF_CAT_FIR_MX));
         this.refPos = catReaderMX(SettingsHandler.refReader(SettingsHandler.REF_CAT_REF_MX));
         this.boxPos = catReaderMX(SettingsHandler.refReader(SettingsHandler.REF_CAT_BOX_MX));
@@ -64,18 +61,18 @@ public class ColorAnalyzer {
         Scanner scanner = new Scanner(ref);
         int x1 = scanner.nextInt();
         int x2 = scanner.nextInt();
-        int y1 = scanner.nextInt() - this.reference.getHeight();
-        int y2 = scanner.nextInt() - this.reference.getHeight();
+        int y1 = scanner.nextInt();
+        int y2 = scanner.nextInt();
         scanner.close();
         return new int[][]{{x1, y1}, {x2, y1}, {x1, y2}, {x2, y2}};
     }
 
     private int[][] catReaderPOS(String ref) {
         Scanner scanner = new Scanner(ref);
-        int[] x1 = {scanner.nextInt(), scanner.nextInt() - this.reference.getHeight()};
-        int[] x2 = {scanner.nextInt(), scanner.nextInt() - this.reference.getHeight()};
-        int[] x3 = {scanner.nextInt(), scanner.nextInt() - this.reference.getHeight()};
-        int[] x4 = {scanner.nextInt(), scanner.nextInt() - this.reference.getHeight()};
+        int[] x1 = {scanner.nextInt(), scanner.nextInt()};
+        int[] x2 = {scanner.nextInt(), scanner.nextInt()};
+        int[] x3 = {scanner.nextInt(), scanner.nextInt()};
+        int[] x4 = {scanner.nextInt(), scanner.nextInt()};
         scanner.close();
         return new int[][]{x1, x2, x3, x4};
     }

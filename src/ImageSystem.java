@@ -1,5 +1,4 @@
 import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.*;
 
@@ -93,6 +92,14 @@ public class ImageSystem {
         analyse();
     }
 
+    public ImageSystem(File directory, File video) throws FileNotFoundException, InterruptedException {
+        this.directory = directory;
+        this.list = new LinkedList<>();
+        this.results = new ArrayList<>();
+        initializeOpenCV(video);
+        analyse();
+    }
+
     public List<ImageDataResult> getResults() {
         return results;
     }
@@ -124,10 +131,9 @@ public class ImageSystem {
         FileWriter temp = new FileWriter(out);
         BufferedWriter writer = new BufferedWriter(temp);
         writer.append(VALIDATION_STR).append("\n");
-        writer.append((this.directory != null) ? this.directory.getAbsolutePath() : "" ).append("\n");
-        for (int i = 0; i < files.length; i++) {
-            writer.append(files[i]).append("\n");
-            writer.append(list.get(i).toString());
+        writer.append((this.directory != null) ? this.directory.getAbsolutePath() : "").append("\n");
+        for (ImageData data : list) {
+            writer.append(data.toString());
         }
         writer.close();
         temp.close();
@@ -196,6 +202,12 @@ public class ImageSystem {
         }
     }
 
+    private void initializeOpenCV(File video) throws FileNotFoundException, InterruptedException {
+        System.out.println("Initializing ImageData System...");
+        ImageProcessorOpenCV.processImage(video, list);
+        System.out.println("ImageSystem initialized.");
+    }
+
     private void initialize() throws IOException, InterruptedException {
         System.out.println("Initializing ImageData System...");
         while (Objects.requireNonNull(this.directory.list()).length == 0) {
@@ -208,27 +220,36 @@ public class ImageSystem {
 
     private void processImages() throws IOException, InterruptedException {
         this.files = this.directory.list();
+        assert files != null;
+        Arrays.sort(files);
         ColorAnalyzer analyzer = new ColorAnalyzer(ImageIO.read(new FileInputStream(directory.getAbsolutePath() + "/" + files[0])));
         System.out.println("Analysing images...");
-        for (int index = 0; index < Objects.requireNonNull(this.files).length; ) {
+        System.out.println("Processing " + files[0] + "...");
+        ImageProcessor[] temp = new ImageProcessor[]{new ImageProcessor(analyzer, list, directory.getAbsolutePath() + "/" + files[0], null)};
+        temp[0].start();
+        for (int index = 1; index < Objects.requireNonNull(this.files).length; ) {
             if (index % 1000 == 0) System.out.println("Processing " + files[index] + "...");
-            DataInputStream datainputstream = new DataInputStream(new BufferedInputStream(new FileInputStream(directory.getAbsolutePath() + "/" + files[index])));
-            byte[] temp = new byte[datainputstream.available()];
-            datainputstream.readFully(temp);
-            datainputstream.close();
-            BufferedImage buffered = ImageIO.read(new ByteArrayInputStream(temp));
-            list.add(analyzer.analyse(buffered));
-            // if (index % 1000 == 0) list.getLast().print();
+            temp = new ImageProcessor[]{new ImageProcessor(analyzer, list, directory.getAbsolutePath() + "/" + files[index], temp[0])};
+            temp[0].start();
+            if (index % 24 == 0) {
+                temp[0].t.join();
+                temp[0] = null;
+            }
             if (++index >= this.files.length) {
                 this.files = this.directory.list();
                 assert this.files != null;
+                Arrays.sort(files);
                 if (index >= this.files.length) {
                     //noinspection BusyWait
                     Thread.sleep(2000);
                     this.files = this.directory.list();
+                    assert this.files != null;
+                    Arrays.sort(files);
                 }
             }
         }
+        assert temp[0] != null;
+        temp[0].t.join();
         System.out.println("All images processed...");
     }
 

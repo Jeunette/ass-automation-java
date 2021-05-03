@@ -46,8 +46,8 @@ public class Run {
         }
         if (videoPath.charAt(videoPath.length() - 1) == ' ') videoPath = videoPath.substring(0, videoPath.length() - 1);
         if (jsonPath.charAt(jsonPath.length() - 1) == ' ') jsonPath = jsonPath.substring(0, jsonPath.length() - 1);
-        File mp4 = new File(videoPath);
-        if (!mp4.isFile()) {
+        File video = new File(videoPath);
+        if (!video.isFile()) {
             System.out.println(videoPath + " Not Found.");
             System.exit(1);
         }
@@ -56,24 +56,24 @@ public class Run {
             System.out.println(jsonPath + " Not Found.");
             System.exit(1);
         }
-        System.out.println("TASK: " + mp4.getName());
-        File dir = new File(mp4.getAbsolutePath() + ".temp/");
+        System.out.println("TASK: " + video.getName());
+        File dir = new File(video.getAbsolutePath() + ".temp/");
         if (!dir.isDirectory()) //noinspection ResultOfMethodCallIgnored
             dir.mkdir();
-        File ref = new File(dir.getAbsolutePath() + "/" + mp4.getName() + ".txt");
+        File ref = new File(dir.getAbsolutePath() + "/" + video.getName() + ".txt");
         File frames = new File(dir.getAbsolutePath() + "/frames");
-        File data = new File(dir.getAbsolutePath() + "/" + mp4.getName() + ".data.txt");
+        File data = new File(dir.getAbsolutePath() + "/" + video.getName() + ".data.txt");
         if (!dir.isDirectory() || !ref.isFile()) {
             if (!ref.isFile()) {
-                getTimestamp(mp4.getAbsolutePath());
+                getTimestamp(video.getAbsolutePath());
             }
             if (!data.isFile() && (!frames.isDirectory() || Objects.requireNonNull(frames.list()).length == 0)) {
                 //noinspection ResultOfMethodCallIgnored
                 frames.mkdir();
-                video2frame(mp4.getAbsolutePath());
+                video2frame(video.getAbsolutePath());
             }
         }
-        File ass = new File(mp4.getAbsolutePath() + ".ass");
+        File ass = new File(video.getAbsolutePath() + ".ass");
         try {
             System.out.println("Reading from save file...");
             ImageSystem system = new ImageSystem(data);
@@ -89,7 +89,7 @@ public class Run {
                 //noinspection BusyWait
                 Thread.sleep(2000);
             }
-            ASSWriter.write(system, reader.snippets, ref, ass);
+            ASSWriter.writeFfprobe(system, reader.snippets, ref, ass);
         } catch (FileNotFoundException | NumberFormatException e) {
             System.out.println("Save file not found.");
             System.out.println("Reading from frames directory...");
@@ -113,7 +113,7 @@ public class Run {
             ass.delete();
             //noinspection ResultOfMethodCallIgnored
             ass.createNewFile();
-            ASSWriter.write(system, reader.snippets, ref, ass);
+            ASSWriter.writeFfprobe(system, reader.snippets, ref, ass);
         }
         while (true) {
             System.out.print("Clean save files? (Y/N): ");
@@ -122,10 +122,11 @@ public class Run {
             if (temp.substring(0, 1).equalsIgnoreCase("N")) {
                 break;
             } else if (temp.substring(0, 1).equalsIgnoreCase("Y")) {
-                removeDir(mp4.getAbsolutePath() + ".temp");
+                removeDir(video.getAbsolutePath() + ".temp");
                 break;
             }
         }
+        System.exit(0);
     }
 
     public static boolean isWindows() {

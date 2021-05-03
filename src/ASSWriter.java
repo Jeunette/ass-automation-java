@@ -217,13 +217,12 @@ public class ASSWriter {
             if (j + diff < 0) {
                 sections.getLast().dialogues.add(new Event(snippet.style, snippet.name, ERROR + " -> " + snippet.text, snippet.fade, false));
                 sections.getLast().dialogues.getLast().setTime(image.startTime, image.startTime);
-                sections.getLast().dialogueCount++;
             } else {
                 image = imageSections.get(i).dialogues.get(j + diff);
                 sections.getLast().dialogues.add(new Event(snippet.style, snippet.name, snippet.text, snippet.fade, false));
                 sections.getLast().dialogues.getLast().setTime(image.startTime, image.endTime);
-                sections.getLast().dialogueCount++;
             }
+            sections.getLast().dialogueCount++;
         }
         EventSection transitions = new EventSection();
         for (int j = 0; j < snippetSections.get(i2).transitionCount; j ++) {
@@ -278,6 +277,58 @@ public class ASSWriter {
         }
     }
 
+    public static LinkedList<EventSection> getEventSectionsOpenCV(ImageSystem system, String path) throws FileNotFoundException {
+        LinkedList<ImageDataResult> results = system.getFormattedResults();
+        TimestampOpenCV timestamps = new TimestampOpenCV(path);
+        LinkedList<EventSection> sections = new LinkedList<>();
+        sections.add(new EventSection());
+        double timestampIn = 0.0;
+        String screenText = SettingsHandler.refReader(SettingsHandler.REF_CAT_SCREEN_TEXT);
+        sections.add(new EventSection(screenText));
+        for (int i = 0; i < results.size() - 1; i++) {
+            if (results.get(i).start) {
+                if (results.get(i).in) timestampIn = timestamps.get(results.get(i).index);
+                if (results.get(i + 1).out) {
+                    if (timestamps.get(results.get(i + 1).index) - timestamps.get(results.get(i).index) < MIN_TIME) {
+                        if (sections.getLast().dialogueCount != 0) {
+                            sections.getLast().screen.setTime(timestampIn, timestamps.get(results.get(i + 1).index + 1));
+                        } else {
+                            sections.getLast().screen.setTime(timestampIn, timestampIn);
+                        }
+                        sections.add(new EventSection(screenText));
+                        if (i + 1 < results.size()) {
+                            timestampIn = timestamps.get(results.get(i + 1).index);
+                        }
+                        continue;
+                    }
+                    sections.getLast().dialogues.add(new Event(CAUTION, ATTENTION, null, true));
+                    sections.getLast().dialogues.getLast().setTime(timestamps.get(results.get(i).index), timestamps.get(results.get(i + 1).index + 1));
+                    sections.getLast().dialogueCount++;
+                    sections.getLast().screen.setTime(timestampIn, timestamps.get(results.get(i + 1).index + 1));
+                    sections.add(new EventSection(screenText));
+                } else {
+                    if (timestamps.get(results.get(i + 1).index) - timestamps.get(results.get(i).index) < MIN_TIME) {
+                        if (sections.getLast().dialogueCount != 0) {
+                            sections.getLast().screen.setTime(timestampIn, timestamps.get(results.get(i + 1).index + 1));
+                        } else {
+                            sections.getLast().screen.setTime(timestampIn, timestampIn);
+                        }
+                        sections.add(new EventSection(screenText));
+                        if (i + 1 < results.size()) {
+                            timestampIn = timestamps.get(results.get(i + 1).index);
+                        }
+                        continue;
+                    }
+                    sections.getLast().dialogues.add(new Event(CAUTION, ATTENTION, null, false));
+                    sections.getLast().dialogues.getLast().setTime(timestamps.get(results.get(i).index), timestamps.get(results.get(i + 1).index));
+                    sections.getLast().dialogueCount++;
+                }
+            }
+        }
+        sections.removeLast();
+        return sections;
+    }
+
     public static LinkedList<EventSection> getEventSections(ImageSystem system, File ref) throws FileNotFoundException {
         LinkedList<ImageDataResult> results = system.getFormattedResults();
         ArrayList<Double> timestamps = getTimeStampReference(ref);
@@ -326,7 +377,17 @@ public class ASSWriter {
         return sections;
     }
 
-    public static void write(ImageSystem system, Snippets snippets, File ref, File ass) throws IOException {
+    public static void writeOpenCV(ImageSystem system, Snippets snippets, File ass, String path) throws IOException {
+        LinkedList<EventSection> imageSections = getEventSectionsOpenCV(system, path);
+        write(snippets, ass, imageSections);
+    }
+
+    public static void writeFfprobe(ImageSystem system, Snippets snippets, File ref, File ass) throws IOException {
+        LinkedList<EventSection> imageSections = getEventSections(system, ref);
+        write(snippets, ass, imageSections);
+    }
+
+    public static void write(Snippets snippets, File ass, LinkedList<EventSection> imageSections) throws IOException {
         File defaultASS;
         try {
             defaultASS = new File(SettingsHandler.reader(SettingsHandler.CAT_ASS_Path));
@@ -334,7 +395,6 @@ public class ASSWriter {
             defaultASS = new File(DEFAULT_ASS);
         }
         Files.copy(defaultASS.toPath(), ass.toPath(), StandardCopyOption.REPLACE_EXISTING);
-        LinkedList<EventSection> imageSections = getEventSections(system, ref);
         LinkedList<EventSection> snippetSections = snippets.getEventSections();
         LinkedList<EventSection> sections = validateEventSections(imageSections, snippetSections);
         if (locationCount != snippets.locationCount) {
