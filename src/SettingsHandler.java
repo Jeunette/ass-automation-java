@@ -50,7 +50,7 @@ public class SettingsHandler {
             return;
         }
         ArrayList<String> list = listReader(CAT_LIST_REFERENCE_PATH);
-        VideoCapture capture = new VideoCapture(videoPath);
+        VideoCapture capture = new VideoCapture(videoPath, Videoio.CAP_FFMPEG);
         int width = (int) capture.get(Videoio.CAP_PROP_FRAME_WIDTH);
         int height = (int) capture.get(Videoio.CAP_PROP_FRAME_HEIGHT);
         for (String line : list) {
