@@ -26,7 +26,7 @@ public class VideoCaptureThreadOpenCV extends Thread {
     }
 
     public void run() {
-        VideoCapture capture = new VideoCapture(video.getAbsolutePath());
+        VideoCapture capture = new VideoCapture(video.getAbsolutePath(), Videoio.CAP_FFMPEG);
         Mat image = new Mat();
         int index = start;
         if (capture.isOpened()) {

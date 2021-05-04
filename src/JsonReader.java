@@ -38,9 +38,8 @@ public class JsonReader {
         this.dialogueList = new LinkedList<>();
         this.transitionList = new LinkedList<>();
         this.snippets = new Snippets();
-        System.out.println("loading snippets... ");
         makeSnippets();
-        System.out.println("snippets created. ");
+        System.out.println("Snippets loaded. ");
     }
 
     public void makeSnippets() throws IOException {
