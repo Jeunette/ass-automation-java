@@ -40,6 +40,7 @@ public class SettingsHandler {
     public static final String FILE_SETTINGS = "settings.txt";
 
     public static String referencePath = null;
+    public static boolean debugMode = false;
 
     public static void setReferencePath(String videoPath) throws IOException {
         String reference = reader(CAT_REFERENCE_OVERWRITE);
@@ -50,7 +51,7 @@ public class SettingsHandler {
             return;
         }
         ArrayList<String> list = listReader(CAT_LIST_REFERENCE_PATH);
-        VideoCapture capture = new VideoCapture(videoPath, Videoio.CAP_FFMPEG);
+        VideoCapture capture = new VideoCapture(videoPath);
         int width = (int) capture.get(Videoio.CAP_PROP_FRAME_WIDTH);
         int height = (int) capture.get(Videoio.CAP_PROP_FRAME_HEIGHT);
         for (String line : list) {
@@ -171,24 +172,29 @@ class TransitionHandler {
 
     public boolean getIgnore(int type) throws IOException {
         exist(type);
+        if (type >= this.infos.size() || this.infos.get(type) == null) return true;
         return this.infos.get(type).ignore;
     }
 
     public String getDescription(int type) throws IOException {
         exist(type);
+        if (type >= this.infos.size() || this.infos.get(type) == null) return "ignored";
         return this.infos.get(type).description;
     }
 
     public void exist(int type) throws IOException {
+        if (!SettingsHandler.debugMode) return;
         if (type >= this.infos.size() || this.infos.get(type) == null) {
-            for (int i = this.infos.size(); i <= type; i++) { this.infos.add(null); }
+            for (int i = this.infos.size(); i <= type; i++) {
+                this.infos.add(null);
+            }
             System.out.println("Transition type - " + type + " - info NOT FOUND!");
             while (true) {
                 System.out.print("Ignore this transition? (Y/N): ");
                 Scanner scanner = new Scanner(System.in);
                 String temp = scanner.next();
                 scanner.nextLine();
-                if (temp.substring(0,1).equalsIgnoreCase("N")) {
+                if (temp.substring(0, 1).equalsIgnoreCase("N")) {
                     System.out.print("Enter ONE word description: ");
                     this.infos.remove(type);
                     this.infos.add(type, new TransitionInfo(type, scanner.next(), false));

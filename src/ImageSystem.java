@@ -89,6 +89,7 @@ public class ImageSystem {
             this.directory = null;
             read(file);
         }
+        System.out.println("ImageSystem initialized...");
         analyse();
     }
 
@@ -97,6 +98,7 @@ public class ImageSystem {
         this.list = new LinkedList<>();
         this.results = new ArrayList<>();
         initializeOpenCV(video);
+        System.out.println("ImageSystem initialized...");
         analyse();
     }
 
@@ -118,12 +120,10 @@ public class ImageSystem {
         }
         scanner.nextLine();
         System.out.println("ImageSystem save file located...");
-        System.out.println("Loading ImageData...");
         while (scanner.hasNextLine()) {
             scanner.nextLine();
             list.add(new ImageData(scanner));
         }
-        System.out.println("ImageSystem initialized...");
         scanner.close();
     }
 
@@ -203,19 +203,15 @@ public class ImageSystem {
     }
 
     private void initializeOpenCV(File video) throws FileNotFoundException, InterruptedException {
-        System.out.println("Initializing ImageData System...");
         ImageProcessorOpenCV.processImage(video, list);
-        System.out.println("ImageSystem initialized.");
     }
 
     private void initialize() throws IOException, InterruptedException {
-        System.out.println("Initializing ImageData System...");
         while (Objects.requireNonNull(this.directory.list()).length == 0) {
             //noinspection BusyWait
             Thread.sleep(2000);
         }
         processImages();
-        System.out.println("ImageSystem initialized.");
     }
 
     private void processImages() throws IOException, InterruptedException {
@@ -223,7 +219,6 @@ public class ImageSystem {
         assert files != null;
         Arrays.sort(files);
         ColorAnalyzer analyzer = new ColorAnalyzer(ImageIO.read(new FileInputStream(directory.getAbsolutePath() + "/" + files[0])));
-        System.out.println("Analysing images...");
         System.out.println("Processing " + files[0] + "...");
         ImageProcessor[] temp = new ImageProcessor[]{new ImageProcessor(analyzer, list, directory.getAbsolutePath() + "/" + files[0], null)};
         temp[0].start();
@@ -250,15 +245,10 @@ public class ImageSystem {
         }
         assert temp[0] != null;
         temp[0].t.join();
-        System.out.println("All images processed...");
     }
 
     private void analyse() {
-        System.out.println("Analysing ImageData...");
-        System.out.println("Finding data reference...");
         findRef();
-        System.out.println("Reference data found...");
-        System.out.println("Generating result...");
         readSettings();
         this.whiteStack = 0;
         ListIterator<ImageData> dataIterator = list.listIterator();

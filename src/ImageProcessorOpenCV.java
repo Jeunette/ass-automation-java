@@ -18,7 +18,7 @@ public class ImageProcessorOpenCV {
 
         ColorAnalyzerOpenCV analyzer = new ColorAnalyzerOpenCV();
 
-        VideoCapture capture = new VideoCapture(video.getAbsolutePath(), Videoio.CAP_FFMPEG);
+        VideoCapture capture = new VideoCapture(video.getAbsolutePath());
         double temp = capture.get(Videoio.CAP_PROP_FRAME_COUNT);
 
         VideoCaptureThreadOpenCV[] threads = new VideoCaptureThreadOpenCV[2];

@@ -21,6 +21,7 @@ public class TestOpenCV {
         }
         System.out.println("TASK: " + video.getName());
         SettingsHandler.setReferencePath(videoPath);
+        SettingsHandler.debugMode = true;
         File data = new File(video.getAbsolutePath() + ".data.txt");
         File ass = new File(video.getAbsolutePath() + ".ass");
         try {

@@ -25,6 +25,7 @@ public class Test {
             System.exit(1);
         }
         SettingsHandler.setReferencePath(videoPath);
+        SettingsHandler.debugMode = true;
         System.out.println("TASK: " + video.getName());
         File dir = new File(video.getAbsolutePath() + ".temp/");
         if (!dir.isDirectory()) //noinspection ResultOfMethodCallIgnored
