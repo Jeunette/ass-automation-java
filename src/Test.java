@@ -65,7 +65,7 @@ public class Test {
             ASSWriter.writeFfprobe(system, reader.snippets, ref, ass);
         } catch (FileNotFoundException | NumberFormatException e) {
             System.out.println("Save file not found.");
-            System.out.println("Reading from frames directory...");
+            System.out.println("Reading from video...");
             ImageSystem system = new ImageSystem(frames);
             if (data.isFile()) {
                 //noinspection ResultOfMethodCallIgnored

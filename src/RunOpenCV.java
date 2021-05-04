@@ -30,7 +30,7 @@ public class RunOpenCV {
             System.out.println(jsonPath + " Not Found.");
             System.exit(1);
         }
-        System.out.println("TASK: " + video.getName());
+        System.out.println("TASK = " + video.getName());
         SettingsHandler.setReferencePath(videoPath);
         File data = new File(video.getAbsolutePath() + ".data.temp");
         File ass = new File(video.getAbsolutePath() + ".ass");
@@ -45,6 +45,7 @@ public class RunOpenCV {
             ASSWriter.writeOpenCV(system, reader.snippets, ass, video.getAbsolutePath());
         } catch (FileNotFoundException | NumberFormatException e) {
             System.out.println("Save file not found.");
+            System.out.println("Reading from video...");
             ImageSystem system = new ImageSystem(video.getParentFile(), video);
             if (data.isFile()) {
                 //noinspection ResultOfMethodCallIgnored

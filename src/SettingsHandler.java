@@ -47,7 +47,7 @@ public class SettingsHandler {
         File check = new File(reference);
         if (check.isFile()) {
             referencePath = reference;
-            System.out.println("REFERENCE: " + reference);
+            System.out.println("REFERENCE = " + reference);
             return;
         }
         ArrayList<String> list = listReader(CAT_LIST_REFERENCE_PATH);
@@ -63,12 +63,12 @@ public class SettingsHandler {
                     System.exit(2);
                 }
                 referencePath = temp[2];
-                System.out.println("REFERENCE: " + temp[2]);
+                System.out.println("REFERENCE = " + temp[2]);
                 return;
             }
         }
         System.out.println("Detected resolution: " + width + " x " + height);
-        System.out.println("Reference file not detected!");
+        System.out.println("Reference file not found!");
         Scanner scanner = new Scanner(System.in);
         System.out.println("Path of reference file: ");
         String temp = scanner.next();
@@ -79,6 +79,7 @@ public class SettingsHandler {
             System.exit(2);
         }
         referencePath = temp;
+        System.out.println("REFERENCE = " + temp);
         listWriter("" + width + " " + height + " " + referencePath, CAT_LIST_REFERENCE_PATH, new File(FILE_SETTINGS));
     }
 

@@ -73,9 +73,6 @@ KAITOの声 KAITO
 瑞希の声 暁山瑞希
 ？？？ 関連人物
 screen screen
-ミク・リン 関連人物
-新 関連人物
-観客達 関連人物
 /[Name Style]
 
 [TransitionType Description Ignore]

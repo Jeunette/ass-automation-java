@@ -119,7 +119,6 @@ public class ImageSystem {
             throw new FileNotFoundException("Invalid File!");
         }
         scanner.nextLine();
-        System.out.println("ImageSystem save file located.");
         while (scanner.hasNextLine()) {
             scanner.nextLine();
             list.add(new ImageData(scanner));
