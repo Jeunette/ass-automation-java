@@ -20,10 +20,9 @@ The videos will be updated in 2 to 5 hours after the events start.
 
 There are 2 versions of videos. One is a compressed version with the prefix `[SHANA]` attached. The other is the
 original version recorded on iPad Pro 2018 12.9-inch. The compressed version doesn't have a decent color space but can
-be used directly in the code without any problems and also runs fluently in Aegisub. The original version may encounter
-errors in the code (ffmpeg), and, if that is the case, you can use the `compress` command then run the code with the new
-compressed video. The original version is also at full color range. **This means major video sharing and streaming sites
-won't support it if you burn the `.ass` subtitle file into it without adding a filter.** See *Additional Help* section "
+be used directly in the code without any problems and also runs fluently in Aegisub. The original version is at full
+color range. **This means major video sharing and streaming sites won't support it if you burn the `.ass` subtitle file
+into it without adding a filter.** See *Additional Help* section "
 burning `.ass` and adding filters to video" for details.
 
 **If you choose to use my video library, PLEASE GIVE CREDIT TO MY NAME [Jeunette](https://twitter.com/Jeunette_H) AND
@@ -34,17 +33,6 @@ are my own recordings, those recordings mainly serve as my contribution to the t
 Here is the link - [OneDrive](https://1drv.ms/f/s!Agy3rSeFledan2j7CXmrBhIkwwZ5).
 
 ---
-
-# Required Third Party Programs
-
-If you downloaded `win-full` version, you are good to go. You don't need to download an additional programs.
-
-If you downloaded `jar` version for macOS and linux. You will need to have
-the [ffmpeg](https://ffmpeg.org/download.html) & [ffprobe](https://ffmpeg.org/download.html) packages installed.
-
-* For macOS, refer ["ffmpeg - Homebrew Formulae"](https://formulae.brew.sh/formula/ffmpeg).
-
-* For linux, refer ["How to Install FFmpeg in Linux"](https://www.tecmint.com/install-ffmpeg-in-linux/).
 
 ## Other Necessary Programs and Files
 
@@ -57,9 +45,9 @@ the [ffmpeg](https://ffmpeg.org/download.html) & [ffprobe](https://ffmpeg.org/do
 
 ---
 
-# How to Start (Windows Only)
+# How to Start (Windows Executable)
 
-1. Download the most recent `[executable]-win.zip` file from
+1. Download the most recent `ass-automation-win-executable-[version].zip` file from
    the [release page](https://github.com/Jeunette/ASS-automation-java/releases) and unzip.
 
 2. Double-click on `run.bat` to open the terminal.
@@ -70,7 +58,6 @@ the [ffmpeg](https://ffmpeg.org/download.html) & [ffprobe](https://ffmpeg.org/do
 
     run [video_file json_file]
     ass [video_file json_file]
-    compress mp4_video_file
 
 ## Notes
 
@@ -85,12 +72,6 @@ the [ffmpeg](https://ffmpeg.org/download.html) & [ffprobe](https://ffmpeg.org/do
 
 * `run` & `ass` will run with or without arguments. Runs without arguments will prompt you to enter the path of the
   files. You can drag and drop the files from File Explorer into the terminal to automatically get the path.
-
-* `compress` is only needed if you encounter an error in running ffmpeg.
-
-* `compress` is only confirmed to be effective on the original version `MP4` videos from my video library or iOS
-  recordings in `MP4` format (unedited video otherwise it will be in `MOV` format which probably don't need to be
-  compressed).
 
 ---
 
@@ -212,10 +193,11 @@ There are a few things that can be modified to fit your personal use.
 
 ## In `settings.txt`
 
-First, below `[Reference File Path]`, the single and only line directs to the path of the `[reference].txt` file
+First, below `[Reference File Path]`, the single and only line directs (overwrites automatic detection) to the path of
+the `[reference].txt` file.
 
     [Reference File Path]
-    path_to_reference_file
+    automatic / path_to_reference_file
 
 Next, you have `[Sample ASS Path]` that directs to the Aegisub `.ass` file that contains the style information. The
 given `untitled.ass` file is used and created by [Project_SEKAI资讯站](https://space.bilibili.com/13148307/dynamic). The
@@ -334,14 +316,3 @@ the [release page](https://github.com/Jeunette/ASS-automation-java/releases).
 
 If you have further questions feel free to contact me via Discord - Jeunette🍹#6870 (yes, there is an emoji XD) - or
 join [this server](https://discord.gg/pHCj3tjYwF).
-
----
-
-# **Source Code Related**
-
-This section is only for source code.
-
-## Required External Files
-
-* [ffmpeg](https://ffmpeg.org/download.html)
-* [ffprobe](https://ffmpeg.org/download.html)

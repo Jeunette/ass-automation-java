@@ -67,6 +67,7 @@ public class RunOpenCV {
             ass.createNewFile();
             ASSWriter.writeOpenCV(system, reader.snippets, ass, video.getAbsolutePath());
         }
+        System.out.println("Instructions appended to \033[1;97m" + Logger.logName + "\033[0m.");
         while (true) {
             System.out.print("Clean save files? (Y/N): ");
             Scanner end = new Scanner(System.in);
