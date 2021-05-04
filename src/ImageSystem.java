@@ -89,8 +89,8 @@ public class ImageSystem {
             this.directory = null;
             read(file);
         }
-        System.out.println("ImageSystem initialized...");
         analyse();
+        System.out.println("ImageSystem initialized.");
     }
 
     public ImageSystem(File directory, File video) throws FileNotFoundException, InterruptedException {
@@ -98,8 +98,8 @@ public class ImageSystem {
         this.list = new LinkedList<>();
         this.results = new ArrayList<>();
         initializeOpenCV(video);
-        System.out.println("ImageSystem initialized...");
         analyse();
+        System.out.println("ImageSystem initialized.");
     }
 
     public List<ImageDataResult> getResults() {
@@ -119,7 +119,7 @@ public class ImageSystem {
             throw new FileNotFoundException("Invalid File!");
         }
         scanner.nextLine();
-        System.out.println("ImageSystem save file located...");
+        System.out.println("ImageSystem save file located.");
         while (scanner.hasNextLine()) {
             scanner.nextLine();
             list.add(new ImageData(scanner));
@@ -276,7 +276,6 @@ public class ImageSystem {
             results.add(current);
         }
         results.add(tempResults.poll());
-        System.out.println("Results generated.");
     }
 
     private void findRef() {

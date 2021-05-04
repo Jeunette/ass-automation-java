@@ -45,7 +45,6 @@ public class RunOpenCV {
             ASSWriter.writeOpenCV(system, reader.snippets, ass, video.getAbsolutePath());
         } catch (FileNotFoundException | NumberFormatException e) {
             System.out.println("Save file not found.");
-            System.out.println("Reading from frames directory...");
             ImageSystem system = new ImageSystem(video.getParentFile(), video);
             if (data.isFile()) {
                 //noinspection ResultOfMethodCallIgnored
