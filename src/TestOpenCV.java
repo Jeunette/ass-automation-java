@@ -8,6 +8,7 @@ public class TestOpenCV {
     public static final String jsonPath = "C:\\Users\\luns7\\Downloads\\Video\\022001_rin01.json";
 
     public static void main(String[] args) throws IOException, InterruptedException {
+        RunOpenCV.loadLibrary();
         File video = new File(videoPath);
         if (!video.isFile()) {
             System.out.println(videoPath + " Not Found.");

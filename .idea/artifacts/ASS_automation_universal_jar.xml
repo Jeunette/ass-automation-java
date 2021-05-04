@@ -1,0 +1,22 @@
+<component name="ArtifactManager">
+  <artifact build-on-make="true" name="ASS-automation-universal-jar">
+    <output-path>$PROJECT_DIR$/release/ASS-automation-universal-jar</output-path>
+    <root id="root">
+      <element id="directory" name="help">
+        <element id="dir-copy" path="$PROJECT_DIR$/release/ASS-automation-win-scr/help" />
+      </element>
+      <element id="directory" name="build">
+        <element id="directory" name="lib" />
+        <element id="file-copy" path="$PROJECT_DIR$/[1920x1342]reference.txt" />
+        <element id="file-copy" path="$PROJECT_DIR$/[1920x1440]reference.txt" />
+        <element id="archive" name="ASS-automation-java.jar">
+          <element id="module-output" name="ASS-automation-java" />
+        </element>
+        <element id="file-copy" path="$PROJECT_DIR$/README.md" />
+        <element id="file-copy" path="$PROJECT_DIR$/settings.txt" />
+        <element id="file-copy" path="$PROJECT_DIR$/untitled.ass" />
+        <element id="file-copy" path="$PROJECT_DIR$/opencv-452.jar" />
+      </element>
+    </root>
+  </artifact>
+</component>

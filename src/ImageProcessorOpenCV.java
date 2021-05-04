@@ -1,4 +1,3 @@
-import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;
 import org.opencv.videoio.Videoio;
@@ -17,7 +16,6 @@ public class ImageProcessorOpenCV {
 
         System.out.println("Analysing images...");
 
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         ColorAnalyzerOpenCV analyzer = new ColorAnalyzerOpenCV();
 
         VideoCapture capture = new VideoCapture(video.getAbsolutePath());

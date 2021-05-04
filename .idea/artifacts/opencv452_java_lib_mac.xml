@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact name="opencv452-java-lib-mac">
+    <output-path>$PROJECT_DIR$/release/opencv452-java-lib-mac</output-path>
+    <root id="root">
+      <element id="directory" name="build">
+        <element id="directory" name="lib" />
+      </element>
+    </root>
+  </artifact>
+</component>

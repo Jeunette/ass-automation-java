@@ -14,12 +14,10 @@
         <element id="file-copy" path="$PROJECT_DIR$/release/ASS-automation-win-scr/bin/ass.bat" />
         <element id="file-copy" path="$PROJECT_DIR$/release/ASS-automation-win-scr/bin/CompressVideo.java" />
         <element id="file-copy" path="$PROJECT_DIR$/release/ASS-automation-win-scr/bin/mp4compression.bat" />
-        <element id="file-copy" path="$PROJECT_DIR$/get_timestamp-frame-info.sh" />
-        <element id="file-copy" path="$PROJECT_DIR$/get_timestamp-frame-info.bat" />
-        <element id="file-copy" path="$PROJECT_DIR$/video2frames.bat" />
-        <element id="file-copy" path="$PROJECT_DIR$/video2frames.sh" />
-        <element id="file-copy" path="$PROJECT_DIR$/ffmpeg.exe" />
-        <element id="file-copy" path="$PROJECT_DIR$/ffprobe.exe" />
+        <element id="directory" name="lib">
+          <element id="file-copy" path="$PROJECT_DIR$/lib/opencv_java452.dll" />
+        </element>
+        <element id="file-copy" path="$USER_HOME$/Documents/opencv/build/java/opencv-452.jar" />
       </element>
       <element id="directory" name="help">
         <element id="dir-copy" path="$PROJECT_DIR$/release/ASS-automation-win-scr/help" />

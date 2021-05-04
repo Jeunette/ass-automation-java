@@ -1,0 +1,33 @@
+<component name="ArtifactManager">
+  <artifact build-on-make="true" name="ASS-automation-win-executable-update">
+    <output-path>$PROJECT_DIR$/release/ASS-automation-win-executable-update</output-path>
+    <root id="root">
+      <element id="directory" name="bin">
+        <element id="file-copy" path="$PROJECT_DIR$/[1920x1342]reference.txt" />
+        <element id="file-copy" path="$PROJECT_DIR$/[1920x1440]reference.txt" />
+        <element id="file-copy" path="$PROJECT_DIR$/settings.txt" />
+        <element id="archive" name="ASS-automation-java.jar">
+          <element id="module-output" name="ASS-automation-java" />
+        </element>
+        <element id="directory" name="cmder_mini">
+          <element id="directory" name="config">
+            <element id="file-copy" path="$PROJECT_DIR$/release/ASS-automation-win-scr/bin/cmder_mini/config/user_aliases.cmd" />
+            <element id="file-copy" path="$PROJECT_DIR$/release/ASS-automation-win-scr/bin/cmder_mini/config/user_profile.cmd" />
+            <element id="file-copy" path="$PROJECT_DIR$/release/ASS-automation-win-scr/bin/cmder_mini/config/user-ConEmu.xml" />
+          </element>
+          <element id="file-copy" path="$PROJECT_DIR$/release/ASS-automation-win-scr/bin/cmder_mini/Help.java" />
+        </element>
+        <element id="file-copy" path="$PROJECT_DIR$/release/ASS-automation-win-scr/bin/ass.bat" />
+        <element id="file-copy" path="$PROJECT_DIR$/release/ASS-automation-win-scr/bin/CompressVideo.java" />
+        <element id="file-copy" path="$PROJECT_DIR$/release/ASS-automation-win-scr/bin/mp4compression.bat" />
+        <element id="file-copy" path="$PROJECT_DIR$/untitled.ass" />
+        <element id="file-copy" path="$USER_HOME$/Documents/opencv/build/java/opencv-452.jar" />
+      </element>
+      <element id="directory" name="help">
+        <element id="dir-copy" path="$PROJECT_DIR$/release/ASS-automation-win-scr/help" />
+      </element>
+      <element id="file-copy" path="$PROJECT_DIR$/release/ASS-automation-win-scr/run.bat" />
+      <element id="file-copy" path="$PROJECT_DIR$/README.md" />
+    </root>
+  </artifact>
+</component>

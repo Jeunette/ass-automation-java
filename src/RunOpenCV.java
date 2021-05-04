@@ -1,11 +1,10 @@
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.util.Scanner;
 
 public class RunOpenCV {
 
     public static void main(String[] args) throws IOException, InterruptedException {
+        loadLibrary();
         String videoPath, jsonPath;
         if (args.length != 2 || args[0].length() == 0 || args[1].length() == 0) {
             System.out.println("Arguments invalid / not detected. ");
@@ -76,6 +75,34 @@ public class RunOpenCV {
             }
         }
         System.exit(0);
+    }
+
+    public static void loadLibrary() {
+        try {
+            InputStream in = null;
+            File fileOut = null;
+            String osName = System.getProperty("os.name");
+            if (osName.startsWith("Windows")) {
+                in = new FileInputStream("lib/opencv_java452.dll");
+                fileOut = File.createTempFile("lib", ".dll");
+            } else if (osName.equals("Mac OS X")) {
+                in = new FileInputStream("lib/libopencv_java452.dylib");
+                fileOut = File.createTempFile("lib", ".dylib");
+            }
+            if (fileOut != null) {
+                OutputStream out = new FileOutputStream(fileOut);
+                byte[] buffer = new byte[1024];
+                int length;
+                while ((length = in.read(buffer)) > 0) {
+                    out.write(buffer, 0, length);
+                }
+                in.close();
+                out.close();
+                System.load(fileOut.toString());
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to load opencv native library", e);
+        }
     }
 
 }
