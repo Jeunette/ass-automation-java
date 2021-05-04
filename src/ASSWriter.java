@@ -390,7 +390,7 @@ public class ASSWriter {
     public static void write(Snippets snippets, File ass, LinkedList<EventSection> imageSections) throws IOException {
         File defaultASS;
         try {
-            defaultASS = new File(SettingsHandler.reader(SettingsHandler.CAT_ASS_Path));
+            defaultASS = new File(SettingsHandler.reader(SettingsHandler.CAT_ASS_PATH));
         } catch (Exception ignored) {
             defaultASS = new File(DEFAULT_ASS);
         }

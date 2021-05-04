@@ -4,7 +4,7 @@ import java.io.IOException;
 
 public class TestOpenCV {
 
-    public static final String videoPath = "C:\\Users\\luns7\\Downloads\\Video\\RIN_1_x264.mp4";
+    public static final String videoPath = "C:\\Users\\luns7\\Downloads\\Video\\RIN_1.mov";
     public static final String jsonPath = "C:\\Users\\luns7\\Downloads\\Video\\022001_rin01.json";
 
     public static void main(String[] args) throws IOException, InterruptedException {
@@ -20,6 +20,7 @@ public class TestOpenCV {
             System.exit(1);
         }
         System.out.println("TASK: " + video.getName());
+        SettingsHandler.setReferencePath(videoPath);
         File data = new File(video.getAbsolutePath() + ".data.txt");
         File ass = new File(video.getAbsolutePath() + ".ass");
         try {

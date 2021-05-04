@@ -31,7 +31,8 @@ public class RunOpenCV {
             System.exit(1);
         }
         System.out.println("TASK: " + video.getName());
-        File data = new File(video.getAbsolutePath() + ".data.txt");
+        SettingsHandler.setReferencePath(videoPath);
+        File data = new File(video.getAbsolutePath() + ".data.temp");
         File ass = new File(video.getAbsolutePath() + ".ass");
         try {
             System.out.println("Reading from save file...");

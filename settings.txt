@@ -1,5 +1,10 @@
 [Reference File Path]
-[1920x1440]reference.txt
+automatic
+
+[Width Height Reference-File-Path]
+1920 1440 [1920x1440]reference.txt
+1920 1342 [1920x1342]reference.txt
+/[Width Height Reference-File-Path]
 
 [Sample ASS Path]
 untitled.ass
@@ -68,6 +73,9 @@ KAITOの声 KAITO
 瑞希の声 暁山瑞希
 ？？？ 関連人物
 screen screen
+ミク・リン 関連人物
+新 関連人物
+観客達 関連人物
 /[Name Style]
 
 [TransitionType Description Ignore]

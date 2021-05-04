@@ -1,0 +1,27 @@
+<component name="ArtifactManager">
+  <artifact build-on-make="true" name="ass-automation-mac-jar">
+    <output-path>$PROJECT_DIR$/release/ass-automation-mac-jar</output-path>
+    <root id="root">
+      <element id="directory" name="help">
+        <element id="dir-copy" path="$PROJECT_DIR$/release/ass-automation-release/other/help" />
+      </element>
+      <element id="directory" name="build">
+        <element id="file-copy" path="$PROJECT_DIR$/opencv-452.jar" />
+        <element id="file-copy" path="$PROJECT_DIR$/[1920x1440]reference.txt" />
+        <element id="file-copy" path="$PROJECT_DIR$/settings.txt" />
+        <element id="file-copy" path="$PROJECT_DIR$/[1920x1342]reference.txt" />
+        <element id="file-copy" path="$PROJECT_DIR$/untitled.ass" />
+        <element id="archive" name="ass-automation-java.jar">
+          <element id="directory" name="META-INF">
+            <element id="file-copy" path="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" />
+          </element>
+          <element id="module-output" name="ass-automation-java" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="file-copy" path="$PROJECT_DIR$/lib/libopencv_java452.dylib" />
+        </element>
+      </element>
+      <element id="file-copy" path="$PROJECT_DIR$/README.md" />
+    </root>
+  </artifact>
+</component>

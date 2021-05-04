@@ -1,0 +1,32 @@
+<component name="ArtifactManager">
+  <artifact build-on-make="true" name="ass-automation-win-executable-update">
+    <output-path>$PROJECT_DIR$/release/ass-automation-win-executable-update</output-path>
+    <root id="root">
+      <element id="directory" name="help">
+        <element id="dir-copy" path="$PROJECT_DIR$/release/ass-automation-release/other/help" />
+      </element>
+      <element id="directory" name="bin">
+        <element id="file-copy" path="$PROJECT_DIR$/[1920x1342]reference.txt" />
+        <element id="file-copy" path="$PROJECT_DIR$/opencv-452.jar" />
+        <element id="file-copy" path="$PROJECT_DIR$/settings.txt" />
+        <element id="file-copy" path="$PROJECT_DIR$/[1920x1440]reference.txt" />
+        <element id="file-copy" path="$PROJECT_DIR$/untitled.ass" />
+        <element id="archive" name="ass-automation-java.jar">
+          <element id="directory" name="META-INF">
+            <element id="file-copy" path="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" />
+          </element>
+          <element id="module-output" name="ass-automation-java" />
+        </element>
+        <element id="directory" name="lib" />
+        <element id="file-copy" path="$PROJECT_DIR$/release/ass-automation-release/ass-automation-win-executable-bin/bin/ass.bat" />
+        <element id="file-copy" path="$PROJECT_DIR$/release/ass-automation-release/ass-automation-win-executable-bin/bin/CompressVideo.java" />
+        <element id="file-copy" path="$PROJECT_DIR$/release/ass-automation-release/ass-automation-win-executable-bin/bin/mp4compression.bat" />
+        <element id="directory" name="cmder_mini">
+          <element id="dir-copy" path="$PROJECT_DIR$/release/ass-automation-release/ass-automation-win-executable-bin/bin/cmder_mini" />
+        </element>
+      </element>
+      <element id="file-copy" path="$PROJECT_DIR$/README.md" />
+      <element id="file-copy" path="$PROJECT_DIR$/release/ass-automation-release/ass-automation-win-executable-bin/run.bat" />
+    </root>
+  </artifact>
+</component>

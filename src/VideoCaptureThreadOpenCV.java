@@ -34,7 +34,7 @@ public class VideoCaptureThreadOpenCV extends Thread {
             while (capture.read(image) && index < end) {
                 if (start == 0 && (index % 1000 == 0 || index == end - 1)) System.out.println(video.getName() + " "
                         + String.format("%.2f", ((double) (index - start)) / (double) (end - 1 - start) * 100.0) + "%");
-                ImageData temp = analyzer.analyse(matToBufferedImage(image), String.format("%08dopCV", index));
+                ImageData temp = analyzer.analyse(matToBufferedImage(image), "" + capture.get(Videoio.CAP_PROP_POS_FRAMES));
                 list.add(temp);
                 index++;
             }

@@ -1,11 +1,15 @@
+import org.opencv.videoio.VideoCapture;
+import org.opencv.videoio.Videoio;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class SettingsHandler {
 
-    public static final String CAT_Reference_Path = "[Reference File Path]";
-    public static final String CAT_ASS_Path = "[Sample ASS Path]";
+    public static final String CAT_REFERENCE_OVERWRITE = "[Reference File Path]";
+    public static final String CAT_LIST_REFERENCE_PATH = "[Width Height Reference-File-Path]";
+    public static final String CAT_ASS_PATH = "[Sample ASS Path]";
 
     public static final String CAT_MAX_ACCEPTABLE_DIFFERENCE = "[Max Acceptable Color Difference]";
     public static final String CAT_MIN_BOX_BORDER_DIFFERENCE = "[Box Border Difference]";
@@ -34,6 +38,47 @@ public class SettingsHandler {
     public static final String REF_CAT_BORDER_MX = "[TEXT BOX BORDER MX]";
 
     public static final String FILE_SETTINGS = "settings.txt";
+
+    public static String referencePath = null;
+
+    public static void setReferencePath(String videoPath) throws IOException {
+        String reference = reader(CAT_REFERENCE_OVERWRITE);
+        File check = new File(reference);
+        if (check.isFile()) {
+            referencePath = reference;
+            System.out.println("REFERENCE: " + reference);
+            return;
+        }
+        ArrayList<String> list = listReader(CAT_LIST_REFERENCE_PATH);
+        VideoCapture capture = new VideoCapture(videoPath);
+        int width = (int) capture.get(Videoio.CAP_PROP_FRAME_WIDTH);
+        int height = (int) capture.get(Videoio.CAP_PROP_FRAME_HEIGHT);
+        for (String line : list) {
+            String[] temp = line.split(" ");
+            if (Integer.parseInt(temp[0]) == width && Integer.parseInt(temp[1]) == height) {
+                check = new File(temp[2]);
+                if (!check.isFile()) {
+                    System.out.println(temp[2] + " Not Found.");
+                    System.exit(2);
+                }
+                referencePath = temp[2];
+                System.out.println("REFERENCE: " + temp[2]);
+                return;
+            }
+        }
+        System.out.println("Reference file not detected!");
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Path of reference file: ");
+        String temp = scanner.next();
+        scanner.nextLine();
+        check = new File(temp);
+        if (!check.isFile()) {
+            System.out.println(temp + " Not Found.");
+            System.exit(2);
+        }
+        referencePath = temp;
+        listWriter("" + width + " " + height + " " + referencePath, CAT_LIST_REFERENCE_PATH, new File(FILE_SETTINGS));
+    }
 
     public static void listWriter(String str, String cat, File file) throws IOException {
         Scanner scanner = new Scanner(new BufferedReader(new FileReader(file)));
@@ -90,9 +135,13 @@ public class SettingsHandler {
 
     public static ArrayList<String> listReader(String cat) throws FileNotFoundException { return listReader(cat, new File(FILE_SETTINGS)); }
 
-    public static String refReader(String cat) throws FileNotFoundException { return reader(cat, new File(reader(CAT_Reference_Path))); }
+    public static String refReader(String cat) throws FileNotFoundException {
+        return reader(cat, new File(referencePath));
+    }
 
-    public static ArrayList<String> refListReader(String cat) throws FileNotFoundException { return listReader(cat, new File(refReader(CAT_Reference_Path))); }
+    public static ArrayList<String> refListReader(String cat) throws FileNotFoundException {
+        return listReader(cat, new File(referencePath));
+    }
 
 }
 

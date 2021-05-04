@@ -24,6 +24,7 @@ public class Test {
             System.out.println(jsonPath + " Not Found.");
             System.exit(1);
         }
+        SettingsHandler.setReferencePath(videoPath);
         System.out.println("TASK: " + video.getName());
         File dir = new File(video.getAbsolutePath() + ".temp/");
         if (!dir.isDirectory()) //noinspection ResultOfMethodCallIgnored
