@@ -3,6 +3,8 @@ import java.util.Scanner;
 
 public class RunOpenCV {
 
+    public static PrintStream stream;
+
     public static void main(String[] args) throws IOException, InterruptedException {
         loadLibrary();
         String videoPath, jsonPath;
@@ -30,12 +32,14 @@ public class RunOpenCV {
             System.out.println(jsonPath + " Not Found.");
             System.exit(1);
         }
-        System.out.println("TASK = " + video.getName());
+        Logger.startLogger();
+        System.out.println("TASK VIDEO = " + video.getName());
+        Logger.out.println("TASK VIDEO = " + video.getName());
         SettingsHandler.setReferencePath(videoPath);
         File data = new File(video.getAbsolutePath() + ".data.temp");
         File ass = new File(video.getAbsolutePath() + ".ass");
         try {
-            System.out.println("Reading from save file...");
+            System.out.println("Reading from save " + data.getName() + "...");
             ImageSystem system = new ImageSystem(data);
             JsonReader reader = new JsonReader(json);
             //noinspection ResultOfMethodCallIgnored
@@ -44,8 +48,8 @@ public class RunOpenCV {
             ass.createNewFile();
             ASSWriter.writeOpenCV(system, reader.snippets, ass, video.getAbsolutePath());
         } catch (FileNotFoundException | NumberFormatException e) {
-            System.out.println("Save file not found.");
-            System.out.println("Reading from video...");
+            System.out.println("Save " + data.getName() + " not found.");
+            System.out.println("Reading from video " + video.getName() + "...");
             ImageSystem system = new ImageSystem(video.getParentFile(), video);
             if (data.isFile()) {
                 //noinspection ResultOfMethodCallIgnored

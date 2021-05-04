@@ -33,13 +33,12 @@ public class JsonReader {
     public JsonReader(File eventStory) throws IOException {
         this.eventStory = eventStory;
         this.scanner = new Scanner(new BufferedReader(new FileReader(this.eventStory)));
-        System.out.println(eventStory.getName() + " located... ");
         this.actionList = new LinkedList<>();
         this.dialogueList = new LinkedList<>();
         this.transitionList = new LinkedList<>();
         this.snippets = new Snippets();
         makeSnippets();
-        System.out.println("Snippets loaded. ");
+        System.out.println("Snippets " + eventStory.getName() + " loaded.");
     }
 
     public void makeSnippets() throws IOException {

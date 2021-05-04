@@ -48,6 +48,7 @@ public class SettingsHandler {
         if (check.isFile()) {
             referencePath = reference;
             System.out.println("REFERENCE = " + reference);
+            Logger.out.println("REFERENCE = " + reference);
             return;
         }
         ArrayList<String> list = listReader(CAT_LIST_REFERENCE_PATH);
@@ -60,10 +61,12 @@ public class SettingsHandler {
                 check = new File(temp[2]);
                 if (!check.isFile()) {
                     System.out.println(temp[2] + " Not Found.");
+                    Logger.out.println(temp[2] + " Not Found.");
                     System.exit(2);
                 }
                 referencePath = temp[2];
                 System.out.println("REFERENCE = " + temp[2]);
+                Logger.out.println("REFERENCE = " + temp[2]);
                 return;
             }
         }
@@ -76,10 +79,12 @@ public class SettingsHandler {
         check = new File(temp);
         if (!check.isFile()) {
             System.out.println(temp + " Not Found.");
+            Logger.out.println(temp + " Not Found.");
             System.exit(2);
         }
         referencePath = temp;
         System.out.println("REFERENCE = " + temp);
+        Logger.out.println("REFERENCE = " + temp);
         listWriter("" + width + " " + height + " " + referencePath, CAT_LIST_REFERENCE_PATH, new File(FILE_SETTINGS));
     }
 
@@ -247,14 +252,20 @@ class NameHandler {
         for (NameInfo info : infos) {
             if (info.name.equals(name)) return info.style;
         }
-        System.out.println("Actor Name - " + name + " - Info Not Found!");
         String style = SettingsHandler.reader(SettingsHandler.CAT_DEFAULT_STYLE);
+        if (!SettingsHandler.debugMode) {
+            this.infos.add(new NameInfo(name, style));
+            System.out.println("\033[1;96mTODO\033[0m: New actor name - " + name + ". Default style - " + style + " - applied.");
+            Logger.out.println("[TODO] New actor name - " + name + ". Default style - " + style + " - applied.");
+            return style;
+        }
+        System.out.println("Actor name - " + name + " - info not found!");
         while (true) {
             System.out.print("Use default style - " + style + " - for this actor name? (Y/N): ");
             Scanner scanner = new Scanner(System.in);
             String temp = scanner.next();
             scanner.nextLine();
-            if (temp.substring(0,1).equalsIgnoreCase("N")) {
+            if (temp.substring(0, 1).equalsIgnoreCase("N")) {
                 System.out.print("Enter the custom style (ONE_WORD) for this actor name: ");
                 style = scanner.next();
                 this.infos.add(new NameInfo(name, style));

@@ -29,6 +29,8 @@ public class ImageProcessorOpenCV {
             list.addAll(data.get(i));
         }
 
+        System.out.println();
+
     }
 
 }
