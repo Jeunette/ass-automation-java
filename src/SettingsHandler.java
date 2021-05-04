@@ -66,6 +66,7 @@ public class SettingsHandler {
                 return;
             }
         }
+        System.out.println("Detected resolution: " + width + " x " + height);
         System.out.println("Reference file not detected!");
         Scanner scanner = new Scanner(System.in);
         System.out.println("Path of reference file: ");

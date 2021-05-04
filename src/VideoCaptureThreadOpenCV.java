@@ -37,6 +37,7 @@ public class VideoCaptureThreadOpenCV extends Thread {
                 ImageData temp = analyzer.analyse(matToBufferedImage(image), "" + capture.get(Videoio.CAP_PROP_POS_FRAMES));
                 list.add(temp);
                 index++;
+                System.out.println(index);
             }
         } else {
             throw new RuntimeException("Error! Cannot Open Video!");
