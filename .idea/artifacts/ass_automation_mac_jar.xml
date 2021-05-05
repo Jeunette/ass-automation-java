@@ -20,6 +20,7 @@
         <element id="directory" name="lib">
           <element id="file-copy" path="$PROJECT_DIR$/lib/libopencv_java452.dylib" />
         </element>
+        <element id="file-copy" path="$PROJECT_DIR$/[1920x1334]reference.txt" />
       </element>
       <element id="file-copy" path="$PROJECT_DIR$/README.md" />
     </root>

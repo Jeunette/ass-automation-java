@@ -20,8 +20,8 @@ public class TestOpenCV {
             System.exit(1);
         }
         Logger.startLogger();
-        System.out.println("TASK VIDEO = " + video.getName());
-        Logger.out.println("TASK VIDEO = " + video.getName() + " **TESTING**");
+        System.out.println("\033[1;96mTASK-VIDEO\033[0m = \033[1;92m" + video.getName() + "\033[0m");
+        Logger.out.println("TASK-VIDEO = " + video.getName() + " **TESTING**");
         SettingsHandler.setReferencePath(videoPath);
         SettingsHandler.debugMode = false;
         File data = new File(video.getAbsolutePath() + ".data.txt");

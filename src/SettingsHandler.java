@@ -47,9 +47,12 @@ public class SettingsHandler {
         File check = new File(reference);
         if (check.isFile()) {
             referencePath = reference;
-            System.out.println("REFERENCE = " + reference);
+            System.out.println("\033[1;94mREFERENCE\033[0m = \033[1;92m" + reference + "\033[0m");
             Logger.out.println("REFERENCE = " + reference);
             return;
+        } else if (!check.getName().toUpperCase().startsWith("AUTO")) {
+            System.out.println("\033[1;97m[System]\033[0m 033[1;97m" + reference + "\033[0m Not Found. Starting automatic selection process.");
+            Logger.out.println(reference + " Not Found. Starting automatic selection process.");
         }
         ArrayList<String> list = listReader(CAT_LIST_REFERENCE_PATH);
         VideoCapture capture = new VideoCapture(videoPath);
@@ -60,30 +63,30 @@ public class SettingsHandler {
             if (Integer.parseInt(temp[0]) == width && Integer.parseInt(temp[1]) == height) {
                 check = new File(temp[2]);
                 if (!check.isFile()) {
-                    System.out.println(temp[2] + " Not Found.");
+                    System.out.println("\033[1;92m" + temp[2] + "\033[0m Not Found.");
                     Logger.out.println(temp[2] + " Not Found.");
                     System.exit(2);
                 }
                 referencePath = temp[2];
-                System.out.println("REFERENCE = " + temp[2]);
+                System.out.println("\033[1;94mREFERENCE\033[0m = \033[1;92m" + temp[2] + "\033[0m");
                 Logger.out.println("REFERENCE = " + temp[2]);
                 return;
             }
         }
-        System.out.println("Detected resolution: " + width + " x " + height);
-        System.out.println("Reference file not found!");
+        System.out.println("\033[1;97m[System]\033[0m Detected resolution: \033[1;92m" + width + "\033[0m x \033[1;92m" + height + "\033[0m");
+        System.out.println("\033[1;97m[System]\033[0m Reference file not recorded!");
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Path of reference file: ");
+        System.out.println("\033[1;97m[System]\033[0m Path of reference file: ");
         String temp = scanner.next();
         scanner.nextLine();
         check = new File(temp);
         if (!check.isFile()) {
-            System.out.println(temp + " Not Found.");
+            System.out.println("\033[1;92m" + temp + "\033[0m Not Found.");
             Logger.out.println(temp + " Not Found.");
             System.exit(2);
         }
         referencePath = temp;
-        System.out.println("REFERENCE = " + temp);
+        System.out.println("\033[1;94mREFERENCE\033[0m = \033[1;92m" + temp + "\033[0m");
         Logger.out.println("REFERENCE = " + temp);
         listWriter("" + width + " " + height + " " + referencePath, CAT_LIST_REFERENCE_PATH, new File(FILE_SETTINGS));
     }

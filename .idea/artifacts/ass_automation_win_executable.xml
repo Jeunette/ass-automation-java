@@ -20,6 +20,7 @@
         <element id="directory" name="lib">
           <element id="file-copy" path="$PROJECT_DIR$/lib/opencv_java452.dll" />
         </element>
+        <element id="file-copy" path="$PROJECT_DIR$/[1920x1334]reference.txt" />
       </element>
       <element id="dir-copy" path="$PROJECT_DIR$/release/ass-automation-release/ass-automation-win-executable-bin" />
       <element id="file-copy" path="$PROJECT_DIR$/README.md" />

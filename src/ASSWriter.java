@@ -76,18 +76,22 @@ public class ASSWriter {
         for (int i = 1; i < imageSections.size(); i++) {
             sum += imageSections.get(i).dialogueCount;
         }
-        System.out.printf("ImageSystems section size: %02d - %03d | ", imageSections.size(), sum);
+        int imageSectionsRealSize = 1;
+        for (EventSection section : imageSections) {
+            if (section.dialogueCount != 0) imageSectionsRealSize++;
+        }
+        System.out.printf("\033[1;97m[ImageSystem]\033[0m %02d%s - %03d | ", imageSectionsRealSize, (imageSections.size() == imageSectionsRealSize) ? "" : "*", sum);
         for (int i = 1; i < imageRef.length; i++) {
-            System.out.printf("[%02d] ", i);
+            if (imageSections.get(i).dialogueCount != 0) System.out.printf("[%02d] ", i);
         }
         System.out.println();
         sum = 0;
         for (int i = 1; i < snippetSections.size(); i++) {
             sum += snippetSections.get(i).dialogueCount;
         }
-        System.out.printf("Snippets sections size:    %02d - %03d | ", snippetSections.size(), sum);
+        System.out.printf("\033[1;97m[Json Events]\033[0m %02d%s - %03d | ", snippetSections.size(), (imageSections.size() == imageSectionsRealSize) ? "" : " ", sum);
         for (int i = 1; i < imageRef.length; i++) {
-            System.out.printf("[%02d] ", imageRef[i]);
+            if (imageSections.get(i).dialogueCount != 0) System.out.printf("[%02d] ", imageRef[i]);
         }
         System.out.println();
         locationCount = 0;
@@ -147,7 +151,7 @@ public class ASSWriter {
                         if (imageIndex + 1 < imageSections.size())
                             tempImageSection.add(imageSections.get(imageIndex + 1));
                         if (tempImageSection.getFirst().dialogueCount == tempSnippetSection.getFirst().dialogueCount) {
-                            System.out.println("\033[1;93mATTENTION\033[0m: Paired combination in \033[1;97msection " + i + "*\033[0m ("
+                            System.out.println("\033[1;93mATTENTION\033[0m: Paired combination in \033[1;92msection " + i + "*\033[0m ("
                                     + imageSections.get(i).screen.start + " - " + imageSections.get(i).screen.end + ").");
                             Logger.out.println("[ATTENTION] Paired combination in section " + i + "* ("
                                     + imageSections.get(i).screen.start + " - " + imageSections.get(i).screen.end + ").");
@@ -160,7 +164,7 @@ public class ASSWriter {
                             fillSections(sections, tempImageSection, tempSnippetSection, 0, 0, locationDescription, locationScreenText, locationText);
                         } else {
                             if (Math.abs(tempImageSection.getFirst().dialogueCount - tempSnippetSection.getFirst().dialogueCount) <= 1) {
-                                System.out.println("\033[1;95mERROR\033[0m: Single line mismatched in \033[1;97msection " + i + "*\033[0m ("
+                                System.out.println("\033[1;95mERROR\033[0m: Single line mismatched in \033[1;92msection " + i + "*\033[0m ("
                                         + imageSections.get(i).screen.start + " - " + imageSections.get(i).screen.end + ").");
                                 Logger.out.println("[ERROR] Single line mismatched in section " + i + "* ("
                                         + imageSections.get(i).screen.start + " - " + imageSections.get(i).screen.end + ").");
@@ -173,7 +177,7 @@ public class ASSWriter {
                                 fillSections(sections, tempImageSection, tempSnippetSection, 0, 0, locationDescription, locationScreenText, locationText);
                             } else {
                                 System.out.println("\033[1;91mCRITICAL_ERROR\033[0m: " + (tempImageSection.getFirst().dialogueCount - tempSnippetSection.getFirst().dialogueCount)
-                                        + " lines mismatched in \033[1;97msection " + i + "*\033[0m (" + imageSections.get(i).screen.start + " - " + imageSections.get(i).screen.end + ").");
+                                        + " lines mismatched in \033[1;92msection " + i + "*\033[0m (" + imageSections.get(i).screen.start + " - " + imageSections.get(i).screen.end + ").");
                                 Logger.out.println("[CRITICAL_ERROR] " + (tempImageSection.getFirst().dialogueCount - tempSnippetSection.getFirst().dialogueCount)
                                         + " lines mismatched in section " + i + "* (" + imageSections.get(i).screen.start + " - " + imageSections.get(i).screen.end + ").");
                                 fillSections(sections, tempImageSection, tempSnippetSection, 0, 0, locationDescription, locationScreenText, locationText);
@@ -187,7 +191,7 @@ public class ASSWriter {
                         }
                         i += imageIndex - i;
                     } else if (imageSections.get(i).dialogueCount != 0) {
-                        System.out.println("\033[1;91mCRITICAL_ERROR\033[0m: None matches for \033[1;97msection " + i + "\033[0m ("
+                        System.out.println("\033[1;91mCRITICAL_ERROR\033[0m: None matches for \033[1;92msection " + i + "\033[0m ("
                                 + imageSections.get(i).screen.start + " - " + imageSections.get(i).screen.end + ").");
                         Logger.out.println("[CRITICAL_ERROR] None matches for section " + i + " ("
                                 + imageSections.get(i).screen.start + " - " + imageSections.get(i).screen.end + ").");
@@ -195,7 +199,7 @@ public class ASSWriter {
                         sections.getLast().dialogues.addFirst(new Event(CAUTION, CRITICAL, CRITICAL_TEXT, false, true));
                         sections.getLast().dialogues.getFirst().setTime(imageSections.get(i).screen.startTime, imageSections.get(i).screen.endTime);
                     } else if (imageSections.get(i).dialogueCount == 0 && (i == 1 || imageSections.get(i - 1).dialogueCount != 0)) {
-                        System.out.println("\033[1;95mERROR\033[0m: Shift (empty section) found in \033[1;97msection " + i + "\033[0m ("
+                        System.out.println("\033[1;95mERROR\033[0m: Shift (empty section) found in \033[1;92msection " + i + "\033[0m ("
                                 + imageSections.get(i).screen.start + " - " + imageSections.get(i).screen.end + ").");
                         Logger.out.println("[ERROR] Shift (empty section) found in section " + i + " ("
                                 + imageSections.get(i).screen.start + " - " + imageSections.get(i).screen.end + ").");
@@ -263,7 +267,7 @@ public class ASSWriter {
             }
         }
         if (transitions.transitionCount != snippetSections.get(i2).transitionCount) {
-            System.out.println("\033[1;95mDISTORTION\033[0m: Distortion transition(s) / effect(s) found in \033[1;97msection " + ((i != 0) ? "" + i : "combined") + "\033[0m ("
+            System.out.println("\033[1;95mDISTORTION\033[0m: Distortion transition(s) / effect(s) found in \033[1;92msection " + ((i != 0) ? "" + i : "combined") + "\033[0m ("
                     + imageSections.get(i).screen.start + " - " + imageSections.get(i).screen.end + ").");
             Logger.out.println("[DISTORTION] Distortion transition(s) / effect(s) found in section " + ((i != 0) ? "" + i : "combined") + " ("
                     + imageSections.get(i).screen.start + " - " + imageSections.get(i).screen.end + ").");
@@ -431,7 +435,7 @@ public class ASSWriter {
             System.out.println("Actual location transition amount: " + snippets.locationCount);
             Logger.out.println("Actual location transition amount: " + snippets.locationCount);
         } else {
-            System.out.println("\033[1;93mATTENTION\033[0m\033[1;97m - \033[1;96mTODO\033[0m: \033[1;97m" + locationCount + "\033[0m location transition detected.");
+            System.out.println("\033[1;93mATTENTION\033[0m - \033[1;96mTODO\033[0m: \033[1;92m" + locationCount + "\033[0m location transition detected.");
             Logger.out.println("[ATTENTION] - [TODO] " + locationCount + " location transition detected.");
         }
         LinkedList<StringBuilder> events = getEvents(sections);

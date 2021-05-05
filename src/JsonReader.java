@@ -21,7 +21,7 @@ public class JsonReader {
     public static final String IDENTIFIER_END_INT = ",";
     public static final String IDENTIFIER_END_STR = "\",";
 
-    public File eventStory;
+    public File story;
     public Scanner scanner;
 
     public LinkedList<Action> actionList;
@@ -30,15 +30,14 @@ public class JsonReader {
 
     public Snippets snippets;
 
-    public JsonReader(File eventStory) throws IOException {
-        this.eventStory = eventStory;
-        this.scanner = new Scanner(new BufferedReader(new FileReader(this.eventStory)));
+    public JsonReader(File story) throws IOException {
+        this.story = story;
+        this.scanner = new Scanner(new BufferedReader(new FileReader(this.story)));
         this.actionList = new LinkedList<>();
         this.dialogueList = new LinkedList<>();
         this.transitionList = new LinkedList<>();
         this.snippets = new Snippets();
         makeSnippets();
-        System.out.println("Snippets " + eventStory.getName() + " loaded.");
     }
 
     public void makeSnippets() throws IOException {

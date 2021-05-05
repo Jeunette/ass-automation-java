@@ -19,11 +19,10 @@
         </element>
         <element id="directory" name="lib" />
         <element id="file-copy" path="$PROJECT_DIR$/release/ass-automation-release/ass-automation-win-executable-bin/bin/ass.bat" />
-        <element id="file-copy" path="$PROJECT_DIR$/release/ass-automation-release/ass-automation-win-executable-bin/bin/CompressVideo.java" />
-        <element id="file-copy" path="$PROJECT_DIR$/release/ass-automation-release/ass-automation-win-executable-bin/bin/mp4compression.bat" />
         <element id="directory" name="cmder_mini">
           <element id="dir-copy" path="$PROJECT_DIR$/release/ass-automation-release/ass-automation-win-executable-bin/bin/cmder_mini" />
         </element>
+        <element id="file-copy" path="$PROJECT_DIR$/[1920x1334]reference.txt" />
       </element>
       <element id="file-copy" path="$PROJECT_DIR$/README.md" />
       <element id="file-copy" path="$PROJECT_DIR$/release/ass-automation-release/ass-automation-win-executable-bin/run.bat" />

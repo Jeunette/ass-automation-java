@@ -32,16 +32,19 @@ public class VideoCaptureThreadOpenCV extends Thread {
         if (capture.isOpened()) {
             capture.set(Videoio.CAP_PROP_POS_FRAMES, index - 1);
             while (capture.read(image) && index < end) {
-                if (start == 0 && (index % 10 == 0 || index == end - 1)) System.out.print("\r" + video.getName() + " "
-                        + String.format("%.2f", ((double) (index - start)) / (double) (end - 1 - start) * 100.0) + "%");
+                if (start == 0 && (index % 10 == 0 || index == end - 1))
+                    System.out.print("\r\033[1;93m[OpenCV]\033[0m \033[1;92m" + video.getName() + "\033[0m \033[1;96m"
+                            + String.format("%.2f", ((double) (index - start)) / (double) (end - 1 - start) * 100.0) + "%\033[0m");
                 ImageData temp = analyzer.analyse(matToBufferedImage(image), "" + capture.get(Videoio.CAP_PROP_POS_FRAMES));
                 list.add(temp);
                 index++;
             }
+            if (start == 0) System.out.print("\r\033[1;97m[OpenCV]\033[0m \033[1;92m" + video.getName() + "\033[0m "
+                    + String.format("%.2f", ((double) (index - 1 - start)) / (double) (end - 1 - start) * 100.0) + "%");
+            capture.release();
         } else {
             throw new RuntimeException("Error! Cannot Open Video!");
         }
-        capture.release();
     }
 
     public static BufferedImage matToBufferedImage(Mat frame) {

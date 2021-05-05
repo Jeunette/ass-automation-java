@@ -3,6 +3,7 @@ ffprobe.exe
 ffmpeg
 ffprobe
 /release/*
+/temp/*
 ass-automation-java.log
 test.results.temp.txt
 test.formatted_results.temp.txt
