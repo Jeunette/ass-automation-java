@@ -255,7 +255,7 @@ class NameHandler {
         String style = SettingsHandler.reader(SettingsHandler.CAT_DEFAULT_STYLE);
         if (!SettingsHandler.debugMode) {
             this.infos.add(new NameInfo(name, style));
-            System.out.println("\033[1;96mTODO\033[0m: New actor name - " + name + ". Default style - " + style + " - applied.");
+            System.out.println("\033[1;96mTODO\033[0m: New actor name - " + name + " - found. Default style - " + style + " - applied.");
             Logger.out.println("[TODO] New actor name - " + name + ". Default style - " + style + " - applied.");
             return style;
         }

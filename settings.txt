@@ -4,6 +4,7 @@ automatic
 [Width Height Reference-File-Path]
 1920 1440 [1920x1440]reference.txt
 1920 1342 [1920x1342]reference.txt
+1920 1334 [1920x1334]reference.txt
 /[Width Height Reference-File-Path]
 
 [Sample ASS Path]
