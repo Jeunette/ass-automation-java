@@ -7,9 +7,8 @@ for [Project SEKAI COLORFUL STAGE!](https://pjsekai.sega.jp/) story videos.
 
 **PLEASE READ THIS DOCUMENT CAREFULLY!**
 
-**If you used this code, PLEASE GIVE CREDIT AND LINK TO HERE
-- [Jeunette / ASS-automation-java](https://github.com/Jeunette/ASS-automation-java) (
-github.com/Jeunette/ASS-automation-java).** Primarily for sharing purposes.
+**If you used this code, PLEASE GIVE CREDIT AND LINK TO HERE - [Jeunette / ASS-automation-java](https://github.com/Jeunette/ASS-automation-java) (
+github.com/Jeunette/ASS-automation-java)** primarily for sharing purposes.
 
 **If you used the given color coded styles for characters, PLEASE GIVE CREDIT AND LINK
 TO  [Project_SEKAI资讯站](https://space.bilibili.com/13148307/dynamic) (space.bilibili.com/13148307).** We are the
