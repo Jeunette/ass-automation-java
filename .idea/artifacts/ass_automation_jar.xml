@@ -1,9 +1,9 @@
 <component name="ArtifactManager">
-  <artifact build-on-make="true" name="ass-automation-win-jar">
-    <output-path>$PROJECT_DIR$/release/ass-automation-win-jar</output-path>
+  <artifact build-on-make="true" name="ass-automation-jar">
+    <output-path>$PROJECT_DIR$/release/ass-automation-release</output-path>
     <root id="root">
       <element id="directory" name="help">
-        <element id="dir-copy" path="$PROJECT_DIR$/release/ass-automation-release/other/help" />
+        <element id="dir-copy" path="$PROJECT_DIR$/release/help" />
       </element>
       <element id="directory" name="build">
         <element id="file-copy" path="$PROJECT_DIR$/opencv-452.jar" />

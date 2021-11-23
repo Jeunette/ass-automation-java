@@ -26,20 +26,20 @@ public class VideoCaptureThreadOpenCV extends Thread {
     }
 
     public void run() {
-        VideoCapture capture = new VideoCapture(video.getAbsolutePath());
+        VideoCapture capture = new VideoCapture(video.getAbsolutePath(), Videoio.CAP_ANY);
         Mat image = new Mat();
         int index = start;
         if (capture.isOpened()) {
             capture.set(Videoio.CAP_PROP_POS_FRAMES, index - 1);
             while (capture.read(image) && index < end) {
-                if (start == 0 && (index % 10 == 0 || index == end - 1))
-                    System.out.print("\r\033[1;93m[OpenCV]\033[0m \033[1;92m" + video.getName() + "\033[0m \033[1;96m"
-                            + String.format("%.2f", ((double) (index - start)) / (double) (end - 1 - start) * 100.0) + "%\033[0m");
+                if (start == 0 && index % 3600 == 0)
+                    System.out.println("\r[OpenCV] " + video.getName() + " "
+                            + String.format("%.2f", ((double) (index - start)) / (double) (end - 1 - start) * 100.0) + "%");
                 ImageData temp = analyzer.analyse(matToBufferedImage(image), "" + capture.get(Videoio.CAP_PROP_POS_FRAMES));
                 list.add(temp);
                 index++;
             }
-            if (start == 0) System.out.print("\r\033[1;97m[OpenCV]\033[0m \033[1;92m" + video.getName() + "\033[0m "
+            if (start == 0) System.out.println("\r[OpenCV] " + video.getName() + " "
                     + String.format("%.2f", ((double) (index - 1 - start)) / (double) (end - 1 - start) * 100.0) + "%");
             capture.release();
         } else {

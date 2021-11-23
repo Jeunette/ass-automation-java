@@ -80,7 +80,7 @@ public class ASSWriter {
         for (EventSection section : imageSections) {
             if (section.dialogueCount != 0) imageSectionsRealSize++;
         }
-        System.out.printf("\033[1;97m[ImageSystem]\033[0m %02d%s - %03d | ", imageSectionsRealSize, (imageSections.size() == imageSectionsRealSize) ? "" : "*", sum);
+        System.out.printf("[OPCV] %02d%s - %03d | ", imageSectionsRealSize, (imageSections.size() == imageSectionsRealSize) ? "" : "*", sum);
         for (int i = 1; i < imageRef.length; i++) {
             if (imageSections.get(i).dialogueCount != 0) System.out.printf("[%02d] ", i);
         }
@@ -89,34 +89,42 @@ public class ASSWriter {
         for (int i = 1; i < snippetSections.size(); i++) {
             sum += snippetSections.get(i).dialogueCount;
         }
-        System.out.printf("\033[1;97m[Json Events]\033[0m %02d%s - %03d | ", snippetSections.size(), (imageSections.size() == imageSectionsRealSize) ? "" : " ", sum);
+        System.out.printf("[JSON] %02d%s - %03d | ", snippetSections.size(), (imageSections.size() == imageSectionsRealSize) ? "" : " ", sum);
         for (int i = 1; i < imageRef.length; i++) {
             if (imageSections.get(i).dialogueCount != 0) System.out.printf("[%02d] ", imageRef[i]);
         }
         System.out.println();
         locationCount = 0;
+        int offset = 0;
+        for (int i = 1; i < imageSections.size(); i++) {
+            if (imageSections.get(i).dialogueCount == 0) {
+                offset++;
+            } else {
+                break;
+            }
+        }
         sections.add(new EventSection());
         if (imageSections.get(0).screen == snippetSections.get(0).screen) {
             for (int i = snippetSections.get(0).transitionCount - 1; i >= 0; i--) {
                 sections.getLast().transitions.addFirst(new Event(Transition.TRANSITION_STYLE, TODO, locationText, false, false));
                 sections.getLast().transitionCount++;
-                sections.getLast().transitions.getFirst().setTime(imageSections.get(1).dialogues.getFirst().startTime - TIME_LOCATION_SEC * sections.getLast().transitionCount,
-                        imageSections.get(1).dialogues.getFirst().startTime - TIME_LOCATION_SEC * (sections.getLast().transitionCount - 1));
+                sections.getLast().transitions.getFirst().setTime(imageSections.get(offset + 1).dialogues.getFirst().startTime - TIME_LOCATION_SEC * sections.getLast().transitionCount,
+                        imageSections.get(offset + 1).dialogues.getFirst().startTime - TIME_LOCATION_SEC * (sections.getLast().transitionCount - 1));
                 sections.getLast().transitions.addFirst(new Event(Transition.TRANSITION_STYLE, TODO, locationScreenText, false, false));
-                sections.getLast().transitions.getFirst().setTime(imageSections.get(1).dialogues.getFirst().startTime - TIME_LOCATION_SEC * sections.getLast().transitionCount,
-                        imageSections.get(1).dialogues.getFirst().startTime - TIME_LOCATION_SEC * (sections.getLast().transitionCount - 1));
-                System.out.println("\033[1;96mTODO\033[0m: Location transition detected ("
-                        + getTimestamp(imageSections.get(1).dialogues.getFirst().startTime - TIME_LOCATION_SEC * sections.getLast().transitionCount) + " - "
-                        + getTimestamp(imageSections.get(1).dialogues.getFirst().startTime - TIME_LOCATION_SEC * (sections.getLast().transitionCount - 1)) + ").");
+                sections.getLast().transitions.getFirst().setTime(imageSections.get(offset + 1).dialogues.getFirst().startTime - TIME_LOCATION_SEC * sections.getLast().transitionCount,
+                        imageSections.get(offset + 1).dialogues.getFirst().startTime - TIME_LOCATION_SEC * (sections.getLast().transitionCount - 1));
+                System.out.println("[TODO] Location transition detected ("
+                        + getTimestamp(imageSections.get(offset + 1).dialogues.getFirst().startTime - TIME_LOCATION_SEC * sections.getLast().transitionCount) + " - "
+                        + getTimestamp(imageSections.get(offset + 1).dialogues.getFirst().startTime - TIME_LOCATION_SEC * (sections.getLast().transitionCount - 1)) + ").");
                 Logger.out.println("[TODO] Location transition detected ("
-                        + getTimestamp(imageSections.get(1).dialogues.getFirst().startTime - TIME_LOCATION_SEC * sections.getLast().transitionCount) + " - "
-                        + getTimestamp(imageSections.get(1).dialogues.getFirst().startTime - TIME_LOCATION_SEC * (sections.getLast().transitionCount - 1)) + ").");
+                        + getTimestamp(imageSections.get(offset + 1).dialogues.getFirst().startTime - TIME_LOCATION_SEC * sections.getLast().transitionCount) + " - "
+                        + getTimestamp(imageSections.get(offset + 1).dialogues.getFirst().startTime - TIME_LOCATION_SEC * (sections.getLast().transitionCount - 1)) + ").");
                 locationCount++;
             }
         } else {
             throw new RuntimeException("FATAL ERROR!");
         }
-        for (int i = 1; i < imageSections.size(); i++) {
+        for (int i = offset + 1; i < imageSections.size(); i++) {
             if (imageSections.get(i).screen != null && (imageRef[i] == 0 || snippetSections.get(imageRef[i]).screen != null)) {
                 if (imageRef[i] != 0) {
                     fillSections(sections, imageSections, snippetSections, i, imageRef[i], locationDescription, locationScreenText, locationText);
@@ -126,7 +134,9 @@ public class ASSWriter {
                     int snippetEndIndex = -1;
                     if ((imageRef[i - 1] != 0 || i - 1 == 0) && imageRef[i - 1] != snippetSections.size() - 1) {
                         snippetStartIndex = imageRef[i - 1] + 1;
-                        while (imageIndex + 1 < imageRef.length && imageRef[imageIndex + 1] == 0) { imageIndex++; }
+                        while (imageIndex + 1 < imageRef.length && imageRef[imageIndex + 1] == 0) {
+                            imageIndex++;
+                        }
                         snippetEndIndex = (imageIndex + 1 < imageRef.length) ? imageRef[imageIndex + 1] - 1 : snippetSections.size() - 1;
                     }
                     if ((imageRef[i - 1] != 0 || i - 1 == 0) && snippetEndIndex - snippetStartIndex >= 0) {
@@ -151,20 +161,21 @@ public class ASSWriter {
                         if (imageIndex + 1 < imageSections.size())
                             tempImageSection.add(imageSections.get(imageIndex + 1));
                         if (tempImageSection.getFirst().dialogueCount == tempSnippetSection.getFirst().dialogueCount) {
-                            System.out.println("\033[1;93mATTENTION\033[0m: Paired combination in \033[1;92msection " + i + "*\033[0m ("
+                            System.out.println("[ATTENTION] Paired combination in section " + i + "* ("
                                     + imageSections.get(i).screen.start + " - " + imageSections.get(i).screen.end + ").");
                             Logger.out.println("[ATTENTION] Paired combination in section " + i + "* ("
                                     + imageSections.get(i).screen.start + " - " + imageSections.get(i).screen.end + ").");
+                            int tempIndex = sections.size() - 1;
                             for (int j = i; j <= imageIndex; j++) {
                                 imageSections.get(j).comment();
                                 sections.add(imageSections.get(j));
                             }
-                            sections.get(i).dialogues.addFirst(new Event(CAUTION, ATTENTION, ATTENTION_TEXT, false, true));
-                            sections.get(i).dialogues.getFirst().setTime(imageSections.get(i).screen.startTime, imageSections.get(imageIndex).screen.endTime);
+                            sections.get(tempIndex).dialogues.addFirst(new Event(CAUTION, ATTENTION, ATTENTION_TEXT, false, true));
+                            sections.get(tempIndex).dialogues.getFirst().setTime(imageSections.get(i).screen.startTime, imageSections.get(imageIndex).screen.endTime);
                             fillSections(sections, tempImageSection, tempSnippetSection, 0, 0, locationDescription, locationScreenText, locationText);
                         } else {
                             if (Math.abs(tempImageSection.getFirst().dialogueCount - tempSnippetSection.getFirst().dialogueCount) <= 1) {
-                                System.out.println("\033[1;95mERROR\033[0m: Single line mismatched in \033[1;92msection " + i + "*\033[0m ("
+                                System.out.println("[ERROR] Single line mismatched in section " + i + "* ("
                                         + imageSections.get(i).screen.start + " - " + imageSections.get(i).screen.end + ").");
                                 Logger.out.println("[ERROR] Single line mismatched in section " + i + "* ("
                                         + imageSections.get(i).screen.start + " - " + imageSections.get(i).screen.end + ").");
@@ -172,12 +183,13 @@ public class ASSWriter {
                                     imageSections.get(j).comment();
                                     sections.add(imageSections.get(j));
                                 }
-                                sections.get(i).dialogues.addFirst(new Event(CAUTION, ERROR, ERROR_TEXT, false, true));
-                                sections.get(i).dialogues.getFirst().setTime(imageSections.get(i).screen.startTime, imageSections.get(imageIndex).screen.endTime);
+                                int tempIndex = sections.size() - 1;
+                                sections.get(tempIndex).dialogues.addFirst(new Event(CAUTION, ERROR, ERROR_TEXT, false, true));
+                                sections.get(tempIndex).dialogues.getFirst().setTime(imageSections.get(i).screen.startTime, imageSections.get(imageIndex).screen.endTime);
                                 fillSections(sections, tempImageSection, tempSnippetSection, 0, 0, locationDescription, locationScreenText, locationText);
                             } else {
-                                System.out.println("\033[1;91mCRITICAL_ERROR\033[0m: " + (tempImageSection.getFirst().dialogueCount - tempSnippetSection.getFirst().dialogueCount)
-                                        + " lines mismatched in \033[1;92msection " + i + "*\033[0m (" + imageSections.get(i).screen.start + " - " + imageSections.get(i).screen.end + ").");
+                                System.out.println("[CRITICAL_ERROR] " + (tempImageSection.getFirst().dialogueCount - tempSnippetSection.getFirst().dialogueCount)
+                                        + " lines mismatched in section " + i + "* (" + imageSections.get(i).screen.start + " - " + imageSections.get(i).screen.end + ").");
                                 Logger.out.println("[CRITICAL_ERROR] " + (tempImageSection.getFirst().dialogueCount - tempSnippetSection.getFirst().dialogueCount)
                                         + " lines mismatched in section " + i + "* (" + imageSections.get(i).screen.start + " - " + imageSections.get(i).screen.end + ").");
                                 fillSections(sections, tempImageSection, tempSnippetSection, 0, 0, locationDescription, locationScreenText, locationText);
@@ -191,7 +203,7 @@ public class ASSWriter {
                         }
                         i += imageIndex - i;
                     } else if (imageSections.get(i).dialogueCount != 0) {
-                        System.out.println("\033[1;91mCRITICAL_ERROR\033[0m: None matches for \033[1;92msection " + i + "\033[0m ("
+                        System.out.println("[CRITICAL_ERROR] None matches for section " + i + " ("
                                 + imageSections.get(i).screen.start + " - " + imageSections.get(i).screen.end + ").");
                         Logger.out.println("[CRITICAL_ERROR] None matches for section " + i + " ("
                                 + imageSections.get(i).screen.start + " - " + imageSections.get(i).screen.end + ").");
@@ -199,7 +211,7 @@ public class ASSWriter {
                         sections.getLast().dialogues.addFirst(new Event(CAUTION, CRITICAL, CRITICAL_TEXT, false, true));
                         sections.getLast().dialogues.getFirst().setTime(imageSections.get(i).screen.startTime, imageSections.get(i).screen.endTime);
                     } else if (imageSections.get(i).dialogueCount == 0 && (i == 1 || imageSections.get(i - 1).dialogueCount != 0)) {
-                        System.out.println("\033[1;95mERROR\033[0m: Shift (empty section) found in \033[1;92msection " + i + "\033[0m ("
+                        System.out.println("[ERROR] Shift (empty section) found in section " + i + " ("
                                 + imageSections.get(i).screen.start + " - " + imageSections.get(i).screen.end + ").");
                         Logger.out.println("[ERROR] Shift (empty section) found in section " + i + " ("
                                 + imageSections.get(i).screen.start + " - " + imageSections.get(i).screen.end + ").");
@@ -252,22 +264,36 @@ public class ASSWriter {
             if (i + 1 < imageSections.size()) {
                 sections.getLast().transitions.addFirst(new Event(Transition.TRANSITION_STYLE, TODO, locationText, false, false));
                 sections.getLast().transitionCount++;
-                sections.getLast().transitions.getFirst().setTime(imageSections.get(i + 1).dialogues.getFirst().startTime - TIME_LOCATION_SEC * sections.getLast().transitionCount,
-                        imageSections.get(i + 1).dialogues.getFirst().startTime - TIME_LOCATION_SEC * (sections.getLast().transitionCount - 1));
-                sections.getLast().transitions.addFirst(new Event(Transition.TRANSITION_STYLE, TODO, locationScreenText, false, false));
-                sections.getLast().transitions.getFirst().setTime(imageSections.get(i + 1).dialogues.getFirst().startTime - TIME_LOCATION_SEC * sections.getLast().transitionCount,
-                        imageSections.get(i + 1).dialogues.getFirst().startTime - TIME_LOCATION_SEC * (sections.getLast().transitionCount - 1));
-                System.out.println("\033[1;96mTODO\033[0m: Location transition detected ("
-                        + getTimestamp(imageSections.get(i + 1).dialogues.getFirst().startTime - TIME_LOCATION_SEC * sections.getLast().transitionCount) + " - "
-                        + getTimestamp(imageSections.get(i + 1).dialogues.getFirst().startTime - TIME_LOCATION_SEC * (sections.getLast().transitionCount - 1)) + ").");
-                Logger.out.println("[TODO] Location transition detected ("
-                        + getTimestamp(imageSections.get(i + 1).dialogues.getFirst().startTime - TIME_LOCATION_SEC * sections.getLast().transitionCount) + " - "
-                        + getTimestamp(imageSections.get(i + 1).dialogues.getFirst().startTime - TIME_LOCATION_SEC * (sections.getLast().transitionCount - 1)) + ").");
+                if (imageSections.get(i + 1).dialogues.size() != 0 && sections.getLast().transitions != null) {
+                    sections.getLast().transitions.getFirst().setTime(imageSections.get(i + 1).dialogues.getFirst().startTime - TIME_LOCATION_SEC * sections.getLast().transitionCount,
+                            imageSections.get(i + 1).dialogues.getFirst().startTime - TIME_LOCATION_SEC * (sections.getLast().transitionCount - 1));
+                    sections.getLast().transitions.addFirst(new Event(Transition.TRANSITION_STYLE, TODO, locationScreenText, false, false));
+                    sections.getLast().transitions.getFirst().setTime(imageSections.get(i + 1).dialogues.getFirst().startTime - TIME_LOCATION_SEC * sections.getLast().transitionCount,
+                            imageSections.get(i + 1).dialogues.getFirst().startTime - TIME_LOCATION_SEC * (sections.getLast().transitionCount - 1));
+                    System.out.println("[TODO] Location transition detected ("
+                            + getTimestamp(imageSections.get(i + 1).dialogues.getFirst().startTime - TIME_LOCATION_SEC * sections.getLast().transitionCount) + " - "
+                            + getTimestamp(imageSections.get(i + 1).dialogues.getFirst().startTime - TIME_LOCATION_SEC * (sections.getLast().transitionCount - 1)) + ").");
+                    Logger.out.println("[TODO] Location transition detected ("
+                            + getTimestamp(imageSections.get(i + 1).dialogues.getFirst().startTime - TIME_LOCATION_SEC * sections.getLast().transitionCount) + " - "
+                            + getTimestamp(imageSections.get(i + 1).dialogues.getFirst().startTime - TIME_LOCATION_SEC * (sections.getLast().transitionCount - 1)) + ").");
+                } else {
+                    sections.getLast().transitions.getFirst().setTime(imageSections.get(i).dialogues.getLast().startTime - TIME_LOCATION_SEC * sections.getLast().transitionCount,
+                            imageSections.get(i).dialogues.getLast().startTime - TIME_LOCATION_SEC * (sections.getLast().transitionCount - 1));
+                    sections.getLast().transitions.addFirst(new Event(Transition.TRANSITION_STYLE, TODO, locationScreenText, false, false));
+                    sections.getLast().transitions.getFirst().setTime(imageSections.get(i).dialogues.getLast().startTime - TIME_LOCATION_SEC * sections.getLast().transitionCount,
+                            imageSections.get(i).dialogues.getLast().startTime - TIME_LOCATION_SEC * (sections.getLast().transitionCount - 1));
+                    System.out.println("[TODO] Location transition detected ("
+                            + getTimestamp(imageSections.get(i).dialogues.getLast().startTime - TIME_LOCATION_SEC * sections.getLast().transitionCount) + " - "
+                            + getTimestamp(imageSections.get(i).dialogues.getLast().startTime - TIME_LOCATION_SEC * (sections.getLast().transitionCount - 1)) + ").");
+                    Logger.out.println("[TODO] Location transition detected ("
+                            + getTimestamp(imageSections.get(i).dialogues.getLast().startTime - TIME_LOCATION_SEC * sections.getLast().transitionCount) + " - "
+                            + getTimestamp(imageSections.get(i).dialogues.getLast().startTime - TIME_LOCATION_SEC * (sections.getLast().transitionCount - 1)) + ").");
+                }
                 locationCount++;
             }
         }
         if (transitions.transitionCount != snippetSections.get(i2).transitionCount) {
-            System.out.println("\033[1;95mDISTORTION\033[0m: Distortion transition(s) / effect(s) found in \033[1;92msection " + ((i != 0) ? "" + i : "combined") + "\033[0m ("
+            System.out.println("[DISTORTION] Distortion transition(s) / effect(s) found in section " + ((i != 0) ? "" + i : "combined") + " ("
                     + imageSections.get(i).screen.start + " - " + imageSections.get(i).screen.end + ").");
             Logger.out.println("[DISTORTION] Distortion transition(s) / effect(s) found in section " + ((i != 0) ? "" + i : "combined") + " ("
                     + imageSections.get(i).screen.start + " - " + imageSections.get(i).screen.end + ").");
@@ -421,11 +447,11 @@ public class ASSWriter {
         LinkedList<EventSection> sections = validateEventSections(imageSections, snippetSections);
         if (locationCount != snippets.locationCount) {
             if (locationCount < snippets.locationCount) {
-                System.out.println("\033[1;91mCRITICAL_ERROR\033[0m: Location Transition amount mismatched.");
+                System.out.println("[CRITICAL_ERROR] Location Transition amount mismatched.");
                 Logger.out.println("[CRITICAL_ERROR] Location Transition amount mismatched.");
                 sections.getFirst().screen = new Event(CAUTION, CRITICAL, "{\\an8\\fs80\\bord8}Please inspect & locate more location transitions.", false, false);
             } else {
-                System.out.println("\033[1;30m\033[0;101mFATAL_ERROR\033[0m: Location Transition amount \033[1;91mEXCEEDED\033[0m.");
+                System.out.println("[FATAL_ERROR] Location Transition amount EXCEEDED.");
                 Logger.out.println("[FATAL_ERROR] Location Transition amount EXCEEDED.");
                 sections.getFirst().screen = new Event(CAUTION, FATAL, "FATAL ERROR\\N{\\fs80\\bord8} Please inspect & modify extra location transitions.\\N{\\fs300\\bord30}:P", false, false);
             }
@@ -435,7 +461,7 @@ public class ASSWriter {
             System.out.println("Actual location transition amount: " + snippets.locationCount);
             Logger.out.println("Actual location transition amount: " + snippets.locationCount);
         } else {
-            System.out.println("\033[1;93mATTENTION\033[0m - \033[1;96mTODO\033[0m: \033[1;92m" + locationCount + "\033[0m location transition detected.");
+            System.out.println("[ATTENTION] - [TODO] " + locationCount + " location transition detected.");
             Logger.out.println("[ATTENTION] - [TODO] " + locationCount + " location transition detected.");
         }
         LinkedList<StringBuilder> events = getEvents(sections);

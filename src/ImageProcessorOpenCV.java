@@ -12,7 +12,7 @@ public class ImageProcessorOpenCV {
 
         ColorAnalyzerOpenCV analyzer = new ColorAnalyzerOpenCV();
 
-        VideoCapture capture = new VideoCapture(video.getAbsolutePath());
+        VideoCapture capture = new VideoCapture(video.getAbsolutePath(), Videoio.CAP_ANY);
         double temp = capture.get(Videoio.CAP_PROP_FRAME_COUNT);
 
         VideoCaptureThreadOpenCV[] threads = new VideoCaptureThreadOpenCV[2];
@@ -28,8 +28,6 @@ public class ImageProcessorOpenCV {
             threads[i].t.join();
             list.addAll(data.get(i));
         }
-
-        System.out.println();
 
     }
 

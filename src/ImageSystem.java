@@ -188,7 +188,7 @@ public class ImageSystem {
                 whiteStack++;
                 if (whiteStack > MAX_WHITE_STACK && !validateDiff(rgbDifference(previousData.fir, currentData.fir), -CON_GAP, CON_GAP)) {
                     whiteStack = 0;
-                    System.out.println("\033[1;93mATTENTION\u001B[0m: Single width text found at \033[1;92mframe " + current.index + "\u001B[0m. Please verify!");
+                    System.out.println("[ATTENTION] Single width text found at frame " + current.index + ". Please verify!");
                     Logger.out.println("[ATTENTION] Single width text found at frame " + current.index + ". Please verify!");
                     return true;
                 }

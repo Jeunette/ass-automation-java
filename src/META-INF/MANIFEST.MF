@@ -1,3 +1,4 @@
 Manifest-Version: 1.0
-Main-Class: RunOpenCV
+Main-Class: GUI
+Class-Path: opencv-452.jar
 

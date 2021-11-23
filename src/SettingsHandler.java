@@ -1,6 +1,7 @@
 import org.opencv.videoio.VideoCapture;
 import org.opencv.videoio.Videoio;
 
+import javax.swing.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -47,15 +48,15 @@ public class SettingsHandler {
         File check = new File(reference);
         if (check.isFile()) {
             referencePath = reference;
-            System.out.println("\033[1;94mREFERENCE\033[0m = \033[1;92m" + reference + "\033[0m");
+            System.out.println("REFERENCE = " + reference);
             Logger.out.println("REFERENCE = " + reference);
             return;
         } else if (!check.getName().toUpperCase().startsWith("AUTO")) {
-            System.out.println("\033[1;97m[System]\033[0m 033[1;97m" + reference + "\033[0m Not Found. Starting automatic selection process.");
+            System.out.println("[System] " + reference + " Not Found. Starting automatic selection process.");
             Logger.out.println(reference + " Not Found. Starting automatic selection process.");
         }
         ArrayList<String> list = listReader(CAT_LIST_REFERENCE_PATH);
-        VideoCapture capture = new VideoCapture(videoPath);
+        VideoCapture capture = new VideoCapture(videoPath, Videoio.CAP_ANY);
         int width = (int) capture.get(Videoio.CAP_PROP_FRAME_WIDTH);
         int height = (int) capture.get(Videoio.CAP_PROP_FRAME_HEIGHT);
         for (String line : list) {
@@ -63,32 +64,31 @@ public class SettingsHandler {
             if (Integer.parseInt(temp[0]) == width && Integer.parseInt(temp[1]) == height) {
                 check = new File(temp[2]);
                 if (!check.isFile()) {
-                    System.out.println("\033[1;92m" + temp[2] + "\033[0m Not Found.");
+                    System.out.println(temp[2] + " Not Found.");
                     Logger.out.println(temp[2] + " Not Found.");
-                    System.exit(2);
+                    return;
                 }
                 referencePath = temp[2];
-                System.out.println("\033[1;94mREFERENCE\033[0m = \033[1;92m" + temp[2] + "\033[0m");
+                System.out.println("REFERENCE = " + temp[2]);
                 Logger.out.println("REFERENCE = " + temp[2]);
                 return;
             }
         }
-        System.out.println("\033[1;97m[System]\033[0m Detected resolution: \033[1;92m" + width + "\033[0m x \033[1;92m" + height + "\033[0m");
-        System.out.println("\033[1;97m[System]\033[0m Reference file not recorded!");
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("\033[1;97m[System]\033[0m Path of reference file: ");
-        String temp = scanner.next();
-        scanner.nextLine();
-        check = new File(temp);
-        if (!check.isFile()) {
-            System.out.println("\033[1;92m" + temp + "\033[0m Not Found.");
-            Logger.out.println(temp + " Not Found.");
-            System.exit(2);
+        System.out.println("[System] Detected resolution: " + width + " x " + height);
+        System.out.println("[System] Reference file not recorded!");
+
+        JFileChooser refChooser = new JFileChooser();
+        refChooser.setCurrentDirectory(new File(System.getProperty("user.home") + "\\Downloads"));
+        while (true) {
+            if (refChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+                File temp = refChooser.getSelectedFile();
+                referencePath = temp.getAbsolutePath();
+                System.out.println("REFERENCE = " + temp);
+                Logger.out.println("REFERENCE = " + temp);
+                listWriter("" + width + " " + height + " " + referencePath, CAT_LIST_REFERENCE_PATH, new File(FILE_SETTINGS));
+                break;
+            }
         }
-        referencePath = temp;
-        System.out.println("\033[1;94mREFERENCE\033[0m = \033[1;92m" + temp + "\033[0m");
-        Logger.out.println("REFERENCE = " + temp);
-        listWriter("" + width + " " + height + " " + referencePath, CAT_LIST_REFERENCE_PATH, new File(FILE_SETTINGS));
     }
 
     public static void listWriter(String str, String cat, File file) throws IOException {
@@ -258,7 +258,7 @@ class NameHandler {
         String style = SettingsHandler.reader(SettingsHandler.CAT_DEFAULT_STYLE);
         if (!SettingsHandler.debugMode) {
             this.infos.add(new NameInfo(name, style));
-            System.out.println("\033[1;96mTODO\033[0m: New actor name - " + name + " - found. Default style - " + style + " - applied.");
+            System.out.println("[TODO] New actor name - " + name + " - found. Default style - " + style + " - applied.");
             Logger.out.println("[TODO] New actor name - " + name + ". Default style - " + style + " - applied.");
             return style;
         }

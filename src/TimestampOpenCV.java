@@ -6,7 +6,7 @@ public class TimestampOpenCV {
     public double fps;
 
     public TimestampOpenCV(String videoPath) {
-        VideoCapture capture = new VideoCapture(videoPath);
+        VideoCapture capture = new VideoCapture(videoPath, Videoio.CAP_ANY);
         this.fps = capture.get(Videoio.CAP_PROP_FPS);
     }
 

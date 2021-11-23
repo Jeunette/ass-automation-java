@@ -45,33 +45,12 @@ Here is the link - [OneDrive](https://1drv.ms/f/s!Agy3rSeFledan2j7CXmrBhIkwwZ5).
 
 ---
 
-# How to Start (Windows Executable)
-
-1. Download the most recent `ass-automation-win-executable-[version].zip` file from
-   the [release page](https://github.com/Jeunette/ASS-automation-java/releases) and unzip.
-
-2. Double-click on `run.bat` to open the terminal.
-
-3. Commands and usages will be automatically printed at the top of the terminal.
-
-## Commands
-
-    run [video_file json_file]
-    ass [video_file json_file]
-
 ## Notes
 
 * `json` file is required for the code to work.
 
 * `json` file can be found and download at [pjsek.ai](https://pjsek.ai/assets/ondemand/event_story) thanks
   to [Erik Chan](https://www.patreon.com/erikchan002).
-
-* `run` will start the process in the main tab.
-
-* `ass` will start the process in a new tab and allow multiple runs.
-
-* `run` & `ass` will run with or without arguments. Runs without arguments will prompt you to enter the path of the
-  files. You can drag and drop the files from File Explorer into the terminal to automatically get the path.
 
 ---
 

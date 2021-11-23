@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.io.*;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -12,11 +13,11 @@ public class RunOpenCV {
         loadLibrary();
         String videoPath, jsonPath;
         if (args.length != 2 || args[0].length() == 0 || args[1].length() == 0) {
-            System.out.println("\033[1;97m[System]\033[0m Arguments invalid / not detected.");
+            System.out.println("[System] Arguments invalid / not detected.");
             Scanner scanner = new Scanner(System.in);
-            System.out.println("\033[1;97m[System]\033[0m Path of video: ");
+            System.out.println("[System] Path of video: ");
             videoPath = scanner.nextLine();
-            System.out.println("\033[1;97m[System]\033[0m Path of .json file: ");
+            System.out.println("[System] Path of .json file: ");
             jsonPath = scanner.nextLine();
         } else {
             videoPath = args[0];
@@ -27,15 +28,15 @@ public class RunOpenCV {
         File video = new File(videoPath);
         if (!video.isFile()) {
             System.out.println(videoPath + " Not Found.");
-            System.exit(1);
+            return;
         }
         File json = new File(jsonPath);
         if (!json.isFile()) {
             System.out.println(jsonPath + " Not Found.");
-            System.exit(1);
+            return;
         }
         Logger.startLogger();
-        System.out.println("\033[1;94mTASK-VIDEO\033[0m = \033[1;92m" + video.getName() + "\033[0m");
+        System.out.println("TASK-VIDEO = " + video.getName());
         Logger.out.println("TASK-VIDEO = " + video.getName());
         SettingsHandler.setReferencePath(videoPath);
         File temp = new File("temp");
@@ -46,15 +47,14 @@ public class RunOpenCV {
         try {
             if (data.isFile()) {
                 while (true) {
-                    System.out.print("\033[1;97m[System]\033[0m Load save data? (Y/N): ");
-                    Scanner scanner = new Scanner(System.in);
-                    String user = scanner.nextLine();
-                    if (user.substring(0, 1).equalsIgnoreCase("N")) {
+                    int result = JOptionPane.showConfirmDialog(GUI.frame, "Load save data?", GUI.TITLE,
+                            JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                    if (result == JOptionPane.YES_OPTION) {
+                        break;
+                    } else if (result == JOptionPane.NO_OPTION) {
                         //noinspection ResultOfMethodCallIgnored
                         data.delete();
                         throw new FileNotFoundException("USER");
-                    } else if (user.substring(0, 1).equalsIgnoreCase("Y")) {
-                        break;
                     }
                 }
             } else {
@@ -65,16 +65,16 @@ public class RunOpenCV {
             if (ass.isFile()) {
                 //noinspection ResultOfMethodCallIgnored
                 ass.renameTo(new File(temp.getAbsolutePath() + "/" + ass.getName() + "." + System.currentTimeMillis() + ".BAK"));
-                System.out.println("\033[1;97m[System]\033[0m Previous ass file moved to \033[1;92m" + temp.getAbsolutePath() + "\033[0m");
+                System.out.println("[System] Previous ass file moved to " + temp.getAbsolutePath());
             }
             //noinspection ResultOfMethodCallIgnored
             ass.createNewFile();
             ASSWriter.writeOpenCV(system, reader.snippets, ass, video.getAbsolutePath());
         } catch (FileNotFoundException | NumberFormatException e) {
             if (!e.getMessage().equals("USER") && !e.getMessage().equals("FIRST"))
-                System.out.println("\033[1;97m[System]\033[0m Loading failed.");
+                System.out.println("[System] Loading failed.");
             try {
-                System.out.println("\033[1;97m[System]\033[0m Reading from video \033[1;92m" + video.getName() + "\033[0m");
+                System.out.println("[System] Reading from video " + video.getName());
                 ImageSystem system = new ImageSystem(video.getParentFile(), video);
                 //noinspection ResultOfMethodCallIgnored
                 data.delete();
@@ -85,7 +85,7 @@ public class RunOpenCV {
                 if (ass.isFile()) {
                     //noinspection ResultOfMethodCallIgnored
                     ass.renameTo(new File(temp.getAbsolutePath() + "/" + ass.getName() + "." + System.currentTimeMillis() + ".BAK"));
-                    System.out.println("\033[1;97m[System]\033[0m Previous ass file moved to \033[1;92m" + temp.getAbsolutePath() + "\033[0m");
+                    System.out.println("[System] Previous ass file moved to " + temp.getAbsolutePath());
                 }
                 //noinspection ResultOfMethodCallIgnored
                 ass.createNewFile();
@@ -95,21 +95,22 @@ public class RunOpenCV {
                 data.delete();
                 //noinspection ResultOfMethodCallIgnored
                 ass.delete();
-                System.out.println("\033[1;30m\033[0;101mFATAL_ERROR\033[0m: System cannot procecced. Check your settings & reference files.");
+                System.out.println(ex.getMessage());
+                System.out.println("[FATAL_ERROR] System cannot proceed. Check your settings & reference files.");
                 Logger.out.println("[FATAL_ERROR] System cannot proceed. Check your settings & reference files.");
-                System.exit(3);
+                return;
             }
         } catch (Exception e) {
             //noinspection ResultOfMethodCallIgnored
             data.delete();
             //noinspection ResultOfMethodCallIgnored
             ass.delete();
-            System.out.println("\033[1;30m\033[0;101mFATAL_ERROR\033[0m: System cannot procecced. Check your settings & reference files.");
+            System.out.println("[FATAL_ERROR] System cannot proceed. Check your settings & reference files.");
             Logger.out.println("[FATAL_ERROR] System cannot proceed. Check your settings & reference files.");
-            System.exit(3);
+            return;
         }
         FileFilter tempFilter = file -> file.isFile() && file.getName().toLowerCase().endsWith(".temp");
-        System.out.println("\033[1;97m[System]\033[0m Instructions appended to \033[1;92m" + Logger.logName + "\033[0m.");
+        System.out.println("[System] Instructions appended to " + Logger.logName);
         while (getDirectorySize(temp, tempFilter) >= 200000000) {
             File[] files = temp.listFiles(tempFilter);
             assert files != null;
@@ -117,7 +118,6 @@ public class RunOpenCV {
             //noinspection ResultOfMethodCallIgnored
             files[0].delete();
         }
-        System.exit(0);
     }
 
     public static long getDirectorySize(File dir, FileFilter filer) {
