@@ -41,14 +41,18 @@ public class GUI {
         jsonChooser.setAcceptAllFileFilterUsed(false);
         jsonChooser.setMultiSelectionEnabled(false);
         JPanel panel = new JPanel();
-        JButton videoSelect = new JButton("Video File");
-        JButton jsonSelect = new JButton("JSON File");
+        JButton videoSelect = new JButton("Select Video File");
+        JButton jsonSelect = new JButton("Select JSON File");
         JButton run = new JButton("Start");
         videoSelect.addActionListener(e -> {
             if (videoChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
                 video = videoChooser.getSelectedFile();
                 videoSelect.setText(video.getName());
                 videoPrefs.put(LAST_USED_FOLDER_VIDEO, videoChooser.getSelectedFile().getParent());
+                if (video != null && json != null) {
+                    panel.setLayout(new GridLayout(3, 1));
+                    panel.add(run, 1);
+                }
             }
         });
         jsonSelect.addActionListener(e -> {
@@ -56,22 +60,31 @@ public class GUI {
                 json = jsonChooser.getSelectedFile();
                 jsonSelect.setText(json.getName());
                 jsonPrefs.put(LAST_USED_FOLDER_JSON, jsonChooser.getSelectedFile().getParent());
+                if (video != null && json != null) {
+                    panel.setLayout(new GridLayout(3, 1));
+                    panel.add(run, 1);
+                }
             }
         });
         run.addActionListener(e -> {
             if (video != null && json != null) {
                 try {
                     start();
+                    video = null;
+                    json = null;
+                    panel.remove(run);
+                    panel.setLayout(new GridLayout(2, 1));
+                    videoSelect.setText("Select Video File");
+                    jsonSelect.setText("Select Video File");
                 } catch (IOException | InterruptedException ioException) {
                     ioException.printStackTrace();
                 }
             }
         });
 
-        panel.setLayout(new GridLayout(3, 1));
+        panel.setLayout(new GridLayout(2, 1));
         panel.add(videoSelect);
         panel.add(jsonSelect);
-        panel.add(run);
 
         frame.getContentPane().add(BorderLayout.CENTER, outputPane);
         frame.getContentPane().add(BorderLayout.EAST, panel);
