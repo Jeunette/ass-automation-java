@@ -61,7 +61,6 @@ public class GUI {
         run.addActionListener(e -> {
             if (video != null && json != null) {
                 try {
-                    out.setText("s");
                     start();
                 } catch (IOException | InterruptedException ioException) {
                     ioException.printStackTrace();
@@ -80,7 +79,7 @@ public class GUI {
     }
 
     public static void start() throws IOException, InterruptedException {
-        out.setText("1");
+        out.setText("");
         RunOpenCV.main(new String[]{video.getAbsolutePath(), json.getAbsolutePath()});
     }
 
