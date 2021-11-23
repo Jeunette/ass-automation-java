@@ -4,10 +4,13 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.util.prefs.Preferences;
 
 public class GUI {
 
     public static final String TITLE = "轴姬 ver3.0";
+    private static final String LAST_USED_FOLDER_VIDEO = "";
+    private static final String LAST_USED_FOLDER_JSON = "";
 
     public static File video, json;
     public static JTextArea out;
@@ -25,12 +28,11 @@ public class GUI {
         PrintStream printStream = new PrintStream(new CustomOutputStream(out));
         System.setOut(printStream);
         System.setOut(printStream);
-        out.setText("TEST\n");
 
-        JFileChooser videoChooser = new JFileChooser();
-        JFileChooser jsonChooser = new JFileChooser();
-        videoChooser.setCurrentDirectory(new File(System.getProperty("user.home") + "\\Downloads"));
-        jsonChooser.setCurrentDirectory(new File(System.getProperty("user.home") + "\\Downloads"));
+        Preferences videoPrefs = Preferences.userRoot().node(GUI.class.getName());
+        Preferences jsonPrefs = Preferences.userRoot().node(GUI.class.getName());
+        JFileChooser videoChooser = new JFileChooser(videoPrefs.get(LAST_USED_FOLDER_VIDEO, new File(".").getAbsolutePath()));
+        JFileChooser jsonChooser = new JFileChooser(jsonPrefs.get(LAST_USED_FOLDER_JSON, new File(".").getAbsolutePath()));
         JPanel panel = new JPanel();
         JButton videoSelect = new JButton("MP4 Video");
         JButton jsonSelect = new JButton("JSON Script");
@@ -39,12 +41,14 @@ public class GUI {
             if (videoChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
                 video = videoChooser.getSelectedFile();
                 videoSelect.setText(video.getName());
+                videoPrefs.put(LAST_USED_FOLDER_VIDEO, videoChooser.getSelectedFile().getParent());
             }
         });
         jsonSelect.addActionListener(e -> {
             if (jsonChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
                 json = jsonChooser.getSelectedFile();
                 jsonSelect.setText(json.getName());
+                jsonPrefs.put(LAST_USED_FOLDER_JSON, jsonChooser.getSelectedFile().getParent());
             }
         });
         run.addActionListener(e -> {
@@ -57,17 +61,18 @@ public class GUI {
             }
         });
 
+        panel.setLayout(new GridLayout(3, 1));
         panel.add(videoSelect);
         panel.add(jsonSelect);
         panel.add(run);
 
-        frame.getContentPane().add(BorderLayout.SOUTH, outputPane);
-        frame.getContentPane().add(BorderLayout.CENTER, panel);
+        frame.getContentPane().add(BorderLayout.CENTER, outputPane);
+        frame.getContentPane().add(BorderLayout.EAST, panel);
         frame.setVisible(true);
     }
 
     public static void start() throws IOException, InterruptedException {
-        out.setText("START\n");
+        out.setText("");
         RunOpenCV.main(new String[]{video.getAbsolutePath(), json.getAbsolutePath()});
     }
 
