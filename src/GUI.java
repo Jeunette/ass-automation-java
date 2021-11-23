@@ -121,7 +121,7 @@ class CustomOutputStream extends OutputStream {
             throw new ArrayIndexOutOfBoundsException();
         byte[] temp = new byte[len + off];
         System.arraycopy(b, off, temp, 0, len);
-        textArea.append(new String(temp));
+        textArea.append(new String(temp, StandardCharsets.UTF_8));
         textArea.setCaretPosition(textArea.getDocument().getLength());
         textArea.update(textArea.getGraphics());
     }
