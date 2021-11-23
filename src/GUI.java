@@ -7,7 +7,7 @@ import java.util.prefs.Preferences;
 
 public class GUI {
 
-    public static final String TITLE = "轴姬 ver3.0";
+    public static final String TITLE = "轴姬 3.0";
     private static final String LAST_USED_FOLDER_VIDEO = "";
     private static final String LAST_USED_FOLDER_JSON = "";
 
