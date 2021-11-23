@@ -1,5 +1,5 @@
 import java.awt.image.BufferedImage;
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class ColorAnalyzerOpenCV {
@@ -50,7 +50,7 @@ public class ColorAnalyzerOpenCV {
 
     int[][] firPos, refPos, boxPos, borderPos;
 
-    public ColorAnalyzerOpenCV() throws FileNotFoundException {
+    public ColorAnalyzerOpenCV() throws IOException {
         this.firPos = catReaderMX(SettingsHandler.refReader(SettingsHandler.REF_CAT_FIR_MX));
         this.refPos = catReaderMX(SettingsHandler.refReader(SettingsHandler.REF_CAT_REF_MX));
         this.boxPos = catReaderMX(SettingsHandler.refReader(SettingsHandler.REF_CAT_BOX_MX));

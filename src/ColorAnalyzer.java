@@ -1,5 +1,5 @@
 import java.awt.image.BufferedImage;
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class ColorAnalyzer {
@@ -52,7 +52,7 @@ public class ColorAnalyzer {
 
     int[][] firPos, refPos, boxPos, borderPos;
 
-    public ColorAnalyzer(BufferedImage image) throws FileNotFoundException {
+    public ColorAnalyzer(BufferedImage image) throws IOException {
         this.reference = image;
         this.firPos = catReaderMX(SettingsHandler.refReader(SettingsHandler.REF_CAT_FIR_MX));
         this.refPos = catReaderMX(SettingsHandler.refReader(SettingsHandler.REF_CAT_REF_MX));

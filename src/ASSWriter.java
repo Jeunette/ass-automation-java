@@ -325,7 +325,7 @@ public class ASSWriter {
         }
     }
 
-    public static LinkedList<EventSection> getEventSectionsOpenCV(ImageSystem system, String path) throws FileNotFoundException {
+    public static LinkedList<EventSection> getEventSectionsOpenCV(ImageSystem system, String path) throws IOException {
         LinkedList<ImageDataResult> results = system.getFormattedResults();
         TimestampOpenCV timestamps = new TimestampOpenCV(path);
         LinkedList<EventSection> sections = new LinkedList<>();
@@ -377,7 +377,7 @@ public class ASSWriter {
         return sections;
     }
 
-    public static LinkedList<EventSection> getEventSections(ImageSystem system, File ref) throws FileNotFoundException {
+    public static LinkedList<EventSection> getEventSections(ImageSystem system, File ref) throws IOException {
         LinkedList<ImageDataResult> results = system.getFormattedResults();
         ArrayList<Double> timestamps = getTimeStampReference(ref);
         LinkedList<EventSection> sections = new LinkedList<>();

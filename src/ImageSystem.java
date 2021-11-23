@@ -92,7 +92,7 @@ public class ImageSystem {
         analyse();
     }
 
-    public ImageSystem(File directory, File video) throws FileNotFoundException, InterruptedException {
+    public ImageSystem(File directory, File video) throws IOException, InterruptedException {
         this.directory = directory;
         this.list = new LinkedList<>();
         this.results = new ArrayList<>();
@@ -199,7 +199,7 @@ public class ImageSystem {
         }
     }
 
-    private void initializeOpenCV(File video) throws FileNotFoundException, InterruptedException {
+    private void initializeOpenCV(File video) throws IOException, InterruptedException {
         ImageProcessorOpenCV.processImage(video, list);
     }
 

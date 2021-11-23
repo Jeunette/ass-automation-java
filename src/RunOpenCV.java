@@ -38,7 +38,7 @@ public class RunOpenCV {
         Logger.startLogger();
         System.out.println("TASK-VIDEO = " + video.getName());
         Logger.out.println("TASK-VIDEO = " + video.getName());
-        SettingsHandler.setReferencePath(videoPath);
+        if (!SettingsHandler.setReferencePath(videoPath)) return;
         File temp = new File("temp");
         if (!temp.isDirectory()) //noinspection ResultOfMethodCallIgnored
             temp.mkdir();

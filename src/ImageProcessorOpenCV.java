@@ -2,13 +2,13 @@ import org.opencv.videoio.VideoCapture;
 import org.opencv.videoio.Videoio;
 
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class ImageProcessorOpenCV {
 
-    public static void processImage(File video, LinkedList<ImageData> list) throws FileNotFoundException, InterruptedException {
+    public static void processImage(File video, LinkedList<ImageData> list) throws IOException, InterruptedException {
 
         ColorAnalyzerOpenCV analyzer = new ColorAnalyzerOpenCV();
 

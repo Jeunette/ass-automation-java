@@ -1,4 +1,3 @@
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.LinkedList;
 
@@ -11,7 +10,7 @@ public class Snippets {
 
     public int locationCount;
 
-    public Snippets() throws FileNotFoundException {
+    public Snippets() throws IOException {
         this.snippets = new LinkedList<>();
         this.cleaned = false;
         this.events = false;

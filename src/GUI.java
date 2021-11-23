@@ -1,9 +1,8 @@
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintStream;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.prefs.Preferences;
 
 public class GUI {
@@ -16,7 +15,7 @@ public class GUI {
     public static JTextArea out;
     public static JFrame frame;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws UnsupportedEncodingException {
         video = null;
         json = null;
         out = new JTextArea(20, 16);
@@ -25,14 +24,22 @@ public class GUI {
         frame.setSize(1000, 400);
 
         JScrollPane outputPane = new JScrollPane(out);
-        PrintStream printStream = new PrintStream(new CustomOutputStream(out));
+        PrintStream printStream = new PrintStream(new CustomOutputStream(out), true, StandardCharsets.UTF_8);
         System.setOut(printStream);
         System.setOut(printStream);
 
         Preferences videoPrefs = Preferences.userRoot().node(GUI.class.getName());
         Preferences jsonPrefs = Preferences.userRoot().node(GUI.class.getName());
+        FileNameExtensionFilter mp4Filter = new FileNameExtensionFilter("MP4 Files", "mp4");
+        FileNameExtensionFilter jsonFilter = new FileNameExtensionFilter("JSON Files", "json");
         JFileChooser videoChooser = new JFileChooser(videoPrefs.get(LAST_USED_FOLDER_VIDEO, new File(".").getAbsolutePath()));
         JFileChooser jsonChooser = new JFileChooser(jsonPrefs.get(LAST_USED_FOLDER_JSON, new File(".").getAbsolutePath()));
+        videoChooser.addChoosableFileFilter(mp4Filter);
+        videoChooser.setFileFilter(mp4Filter);
+        videoChooser.setMultiSelectionEnabled(false);
+        jsonChooser.addChoosableFileFilter(jsonFilter);
+        jsonChooser.setAcceptAllFileFilterUsed(false);
+        jsonChooser.setMultiSelectionEnabled(false);
         JPanel panel = new JPanel();
         JButton videoSelect = new JButton("MP4 Video");
         JButton jsonSelect = new JButton("JSON Script");
@@ -54,6 +61,7 @@ public class GUI {
         run.addActionListener(e -> {
             if (video != null && json != null) {
                 try {
+                    out.setText("s");
                     start();
                 } catch (IOException | InterruptedException ioException) {
                     ioException.printStackTrace();
@@ -72,7 +80,7 @@ public class GUI {
     }
 
     public static void start() throws IOException, InterruptedException {
-        out.setText("");
+        out.setText("1");
         RunOpenCV.main(new String[]{video.getAbsolutePath(), json.getAbsolutePath()});
     }
 
@@ -87,11 +95,23 @@ class CustomOutputStream extends OutputStream {
     }
 
     public void write(int b) {
-        // redirects data to the text area
         textArea.append(String.valueOf((char) b));
-        // scrolls the text area to the end of data
         textArea.setCaretPosition(textArea.getDocument().getLength());
-        // keeps the textArea up to date
         textArea.update(textArea.getGraphics());
     }
+
+    public void write(byte[] b) throws NullPointerException {
+        write(b, 0, b.length);
+    }
+
+    public void write(byte[] b, int off, int len) throws NullPointerException, IndexOutOfBoundsException {
+        if (off < 0 || len < 0 || off + len > b.length)
+            throw new ArrayIndexOutOfBoundsException();
+        byte[] temp = new byte[len + off];
+        System.arraycopy(b, off, temp, 0, len);
+        textArea.append(new String(temp));
+        textArea.setCaretPosition(textArea.getDocument().getLength());
+        textArea.update(textArea.getGraphics());
+    }
+
 }

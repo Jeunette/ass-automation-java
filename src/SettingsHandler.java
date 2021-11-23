@@ -3,6 +3,7 @@ import org.opencv.videoio.Videoio;
 
 import javax.swing.*;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -43,14 +44,14 @@ public class SettingsHandler {
     public static String referencePath = null;
     public static boolean debugMode = false;
 
-    public static void setReferencePath(String videoPath) throws IOException {
+    public static boolean setReferencePath(String videoPath) throws IOException {
         String reference = reader(CAT_REFERENCE_OVERWRITE);
         File check = new File(reference);
         if (check.isFile()) {
             referencePath = reference;
             System.out.println("REFERENCE = " + reference);
             Logger.out.println("REFERENCE = " + reference);
-            return;
+            return true;
         } else if (!check.getName().toUpperCase().startsWith("AUTO")) {
             System.out.println("[System] " + reference + " Not Found. Starting automatic selection process.");
             Logger.out.println(reference + " Not Found. Starting automatic selection process.");
@@ -66,33 +67,35 @@ public class SettingsHandler {
                 if (!check.isFile()) {
                     System.out.println(temp[2] + " Not Found.");
                     Logger.out.println(temp[2] + " Not Found.");
-                    return;
+                    return false;
                 }
                 referencePath = temp[2];
                 System.out.println("REFERENCE = " + temp[2]);
                 Logger.out.println("REFERENCE = " + temp[2]);
-                return;
+                return true;
             }
         }
         System.out.println("[System] Detected resolution: " + width + " x " + height);
         System.out.println("[System] Reference file not recorded!");
 
-        JFileChooser refChooser = new JFileChooser();
-        refChooser.setCurrentDirectory(new File(System.getProperty("user.home") + "\\Downloads"));
+        JFileChooser refChooser = new JFileChooser(System.getProperty("user.dir"));
         while (true) {
-            if (refChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+            int val = refChooser.showOpenDialog(null);
+            if (val == JFileChooser.APPROVE_OPTION) {
                 File temp = refChooser.getSelectedFile();
                 referencePath = temp.getAbsolutePath();
                 System.out.println("REFERENCE = " + temp);
                 Logger.out.println("REFERENCE = " + temp);
                 listWriter("" + width + " " + height + " " + referencePath, CAT_LIST_REFERENCE_PATH, new File(FILE_SETTINGS));
-                break;
+                return true;
+            } else if (val == JFileChooser.CANCEL_OPTION) {
+                return false;
             }
         }
     }
 
     public static void listWriter(String str, String cat, File file) throws IOException {
-        Scanner scanner = new Scanner(new BufferedReader(new FileReader(file)));
+        Scanner scanner = new Scanner(new BufferedReader(new FileReader(file, StandardCharsets.UTF_8)));
         StringBuilder newFile = new StringBuilder();
         while (scanner.hasNextLine()) {
             String temp = scanner.nextLine();
@@ -111,9 +114,9 @@ public class SettingsHandler {
         writer.close();
     }
 
-    public static String reader(String cat, File file) throws FileNotFoundException {
-        Scanner scanner = new Scanner(new BufferedReader(new FileReader(file)));
-        while(scanner.hasNextLine()) {
+    public static String reader(String cat, File file) throws IOException {
+        Scanner scanner = new Scanner(new BufferedReader(new FileReader(file, StandardCharsets.UTF_8)));
+        while (scanner.hasNextLine()) {
             if (scanner.nextLine().contains(cat)) {
                 String temp = scanner.nextLine();
                 scanner.close();
@@ -124,10 +127,10 @@ public class SettingsHandler {
         throw new FileNotFoundException();
     }
 
-    public static ArrayList<String> listReader(String cat, File file) throws FileNotFoundException {
-        Scanner scanner = new Scanner(new BufferedReader(new FileReader(file)));
+    public static ArrayList<String> listReader(String cat, File file) throws IOException {
+        Scanner scanner = new Scanner(new BufferedReader(new FileReader(file, StandardCharsets.UTF_8)));
         ArrayList<String> list = new ArrayList<>();
-        while(scanner.hasNextLine()) {
+        while (scanner.hasNextLine()) {
             if (scanner.nextLine().contains(cat)) {
                 String temp = scanner.nextLine();
                 while (!temp.contains(cat)) {
@@ -142,15 +145,19 @@ public class SettingsHandler {
         return list;
     }
 
-    public static String reader(String cat) throws FileNotFoundException { return reader(cat, new File(FILE_SETTINGS)); }
+    public static String reader(String cat) throws IOException {
+        return reader(cat, new File(FILE_SETTINGS));
+    }
 
-    public static ArrayList<String> listReader(String cat) throws FileNotFoundException { return listReader(cat, new File(FILE_SETTINGS)); }
+    public static ArrayList<String> listReader(String cat) throws IOException {
+        return listReader(cat, new File(FILE_SETTINGS));
+    }
 
-    public static String refReader(String cat) throws FileNotFoundException {
+    public static String refReader(String cat) throws IOException {
         return reader(cat, new File(referencePath));
     }
 
-    public static ArrayList<String> refListReader(String cat) throws FileNotFoundException {
+    public static ArrayList<String> refListReader(String cat) throws IOException {
         return listReader(cat, new File(referencePath));
     }
 
@@ -160,7 +167,7 @@ class TransitionHandler {
 
     ArrayList<TransitionInfo> infos;
 
-    public TransitionHandler() throws FileNotFoundException {
+    public TransitionHandler() throws IOException {
         Scanner scanner;
         this.infos = new ArrayList<>();
         this.infos.add(null);
@@ -200,7 +207,7 @@ class TransitionHandler {
             System.out.println("Transition type - " + type + " - info NOT FOUND!");
             while (true) {
                 System.out.print("Ignore this transition? (Y/N): ");
-                Scanner scanner = new Scanner(System.in);
+                Scanner scanner = new Scanner(System.in, StandardCharsets.UTF_8);
                 String temp = scanner.next();
                 scanner.nextLine();
                 if (temp.substring(0, 1).equalsIgnoreCase("N")) {
@@ -241,7 +248,7 @@ class NameHandler {
 
     ArrayList<NameInfo> infos;
 
-    public NameHandler()  throws FileNotFoundException {
+    public NameHandler() throws IOException {
         Scanner scanner;
         this.infos = new ArrayList<>();
         for (String str : SettingsHandler.listReader(SettingsHandler.CAT_LIST_NAME_INFO)) {
@@ -265,7 +272,7 @@ class NameHandler {
         System.out.println("Actor name - " + name + " - info not found!");
         while (true) {
             System.out.print("Use default style - " + style + " - for this actor name? (Y/N): ");
-            Scanner scanner = new Scanner(System.in);
+            Scanner scanner = new Scanner(System.in, StandardCharsets.UTF_8);
             String temp = scanner.next();
             scanner.nextLine();
             if (temp.substring(0, 1).equalsIgnoreCase("N")) {
