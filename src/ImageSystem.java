@@ -1,5 +1,6 @@
 import javax.imageio.ImageIO;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class ImageSystem {
@@ -111,7 +112,7 @@ public class ImageSystem {
     }
 
     public void read(File in) throws IOException {
-        Scanner scanner = new Scanner(new BufferedReader(new FileReader(in)));
+        Scanner scanner = new Scanner(new BufferedReader(new FileReader(in, StandardCharsets.UTF_8)));
         if (!scanner.nextLine().contains(VALIDATION_STR)) {
             scanner.close();
             throw new FileNotFoundException("Invalid File!");

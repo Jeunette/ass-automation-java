@@ -1,4 +1,5 @@
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
@@ -506,9 +507,9 @@ public class ASSWriter {
         return events;
     }
 
-    public static ArrayList<Double> getTimeStampReference (File ref) throws FileNotFoundException {
+    public static ArrayList<Double> getTimeStampReference(File ref) throws IOException {
         ArrayList<Double> timestamps = new ArrayList<>();
-        Scanner scanner = new Scanner(new BufferedReader(new FileReader(ref)));
+        Scanner scanner = new Scanner(new BufferedReader(new FileReader(ref, StandardCharsets.UTF_8)));
         while (scanner.hasNextLine()) {
             String temp = scanner.nextLine();
             if (temp.contains(REF_DELIMITER)) {

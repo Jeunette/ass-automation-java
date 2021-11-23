@@ -1,4 +1,5 @@
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 import java.util.Scanner;
 
@@ -32,7 +33,7 @@ public class JsonReader {
 
     public JsonReader(File story) throws IOException {
         this.story = story;
-        this.scanner = new Scanner(new BufferedReader(new FileReader(this.story)));
+        this.scanner = new Scanner(new BufferedReader(new FileReader(this.story, StandardCharsets.UTF_8)));
         this.actionList = new LinkedList<>();
         this.dialogueList = new LinkedList<>();
         this.transitionList = new LinkedList<>();
