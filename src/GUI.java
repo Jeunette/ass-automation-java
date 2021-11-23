@@ -41,8 +41,8 @@ public class GUI {
         jsonChooser.setAcceptAllFileFilterUsed(false);
         jsonChooser.setMultiSelectionEnabled(false);
         JPanel panel = new JPanel();
-        JButton videoSelect = new JButton("MP4 Video");
-        JButton jsonSelect = new JButton("JSON Script");
+        JButton videoSelect = new JButton("Video File");
+        JButton jsonSelect = new JButton("JSON File");
         JButton run = new JButton("Start");
         videoSelect.addActionListener(e -> {
             if (videoChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
