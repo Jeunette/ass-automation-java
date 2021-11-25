@@ -75,7 +75,7 @@ public class GUI {
                     panel.remove(run);
                     panel.setLayout(new GridLayout(2, 1));
                     videoSelect.setText("Select Video File");
-                    jsonSelect.setText("Select Video File");
+                    jsonSelect.setText("Select JSON File");
                 } catch (IOException | InterruptedException ioException) {
                     ioException.printStackTrace();
                 }
