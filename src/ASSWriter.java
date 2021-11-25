@@ -466,7 +466,7 @@ public class ASSWriter {
             Logger.out.println("[ATTENTION] - [TODO] " + locationCount + " location transition detected.");
         }
         LinkedList<StringBuilder> events = getEvents(sections);
-        FileWriter temp = new FileWriter(ass, true);
+        FileWriter temp = new FileWriter(ass, StandardCharsets.UTF_8, true);
         BufferedWriter writer = new BufferedWriter(temp);
         PrintWriter printer = new PrintWriter(writer);
         printer.print(events.get(0));

@@ -5,7 +5,7 @@ import java.io.PrintStream;
 
 public class Logger {
 
-    public static final String logName = "ass-automation-java.log";
+    public static final String logName = "ass-automation.log";
 
     public static PrintStream out;
 
