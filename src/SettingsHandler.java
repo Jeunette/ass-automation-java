@@ -109,7 +109,7 @@ public class SettingsHandler {
             newFile.append(temp).append("\n");
         }
         scanner.close();
-        FileWriter writer = new FileWriter(file);
+        FileWriter writer = new FileWriter(file, StandardCharsets.UTF_8, true);
         writer.append(newFile);
         writer.close();
     }

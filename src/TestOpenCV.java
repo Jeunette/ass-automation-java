@@ -4,8 +4,8 @@ import java.io.IOException;
 
 public class TestOpenCV {
 
-    public static final String videoPath = "C:\\Users\\luns7\\Downloads\\Video\\event_32-2.mp4";
-    public static final String jsonPath = "C:\\Users\\luns7\\Downloads\\Video\\event_32_02.json";
+    public static final String videoPath = "C:\\Users\\luns7\\Downloads\\Video\\event_54_01_edit.mp4";
+    public static final String jsonPath = "C:\\Users\\luns7\\Downloads\\Video\\event_54_01.json";
 
     public static void main(String[] args) throws IOException, InterruptedException {
         RunOpenCV.loadLibrary();
